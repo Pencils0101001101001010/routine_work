@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <style>
+    #erd svg.erDiagram .divider path {
+      stroke-opacity: 0.5;
+    }
+    #erd svg.erDiagram .row-rect-odd path,
+    #erd svg.erDiagram .row-rect-odd rect,
+    #erd svg.erDiagram .row-rect-even path,
+    #erd svg.erDiagram .row-rect-even rect {
+      stroke: none !important;
+    }
+  </style>
+  <body>
+    <div id="erd"></div>
+    <script type="module">
+      import mermaid from "https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs";
+      const themeMode = document.documentElement.dataset.mode;
+      const dark = themeMode
+        ? themeMode === "dark"
+        : matchMedia("(prefers-color-scheme: dark)").matches;
+      await document.fonts.ready;
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: "base",
+        fontFamily: '"anthropic-sans", sans-serif',
+        themeVariables: {
+          darkMode: false, // diagram surface is white regardless of OS theme
+          fontSize: "13px",
+          fontFamily: '"anthropic-sans", sans-serif',
+          lineColor: "#73726c",
+          textColor: "#3d3d3a",
+          primaryTextColor: "#3d3d3a",
+          attributeBackgroundColorOdd: "#ffffff",
+          attributeBackgroundColorEven: "#f4f4f8",
+          entityBkgColor: "#fdf3d9", // matches your header/PK peach fill
+          entityBorderColor: "#8888c8",
+        },
+      });
+      const { svg } = await mermaid.render(
+        "erd-svg",
+        `erDiagram
+  USERS ||--o{ JOB_PREFERENCES : creates
+  USERS ||--o{ ACTIVITY_LOG : logs
+  JOB_PREFERENCES ||--o{ JOB_MATCHES : produces
+  USERS ||--o{ NOTIFICATIONS_LOG : receives
+  JOB_MATCHES ||--o{ NOTIFICATIONS_LOG : triggers
+  USERS {
+    uuid id PK
+    string whatsapp_number
+    string name
+    timestamp created_at
+    boolean is_active
+  }
+  JOB_PREFERENCES {
+    uuid id PK
+    uuid user_id FK
+    string job_title
+    string location
+    timestamp last_checked_at
+    boolean active
+  }
+  JOB_MATCHES {
+    uuid id PK
+    uuid preference_id FK
+    string external_job_id
+    string title
+    string company
+    string source_url
+    timestamp found_at
+  }
+  NOTIFICATIONS_LOG {
+    uuid id PK
+    uuid user_id FK
+    uuid job_match_id FK
+    string status
+    timestamp sent_at
+  }
+  ACTIVITY_LOG {
+    uuid id PK
+    uuid user_id FK
+    string activity_type
+    date activity_date
+  }`,
+      );
+      document.getElementById("erd").innerHTML = svg;
+      document.querySelectorAll("#erd svg.erDiagram .node").forEach((node) => {
+        const firstPath = node.querySelector("path[d]");
+        if (!firstPath) return;
+        const d = firstPath.getAttribute("d");
+        const nums = d.match(/-?[\d.]+/g)?.map(Number);
+        if (!nums || nums.length < 8) return;
+        const xs = [nums[0], nums[2], nums[4], nums[6]];
+        const ys = [nums[1], nums[3], nums[5], nums[7]];
+        const x = Math.min(...xs),
+          y = Math.min(...ys);
+        const w = Math.max(...xs) - x,
+          h = Math.max(...ys) - y;
+        const rect = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "rect",
+        );
+        rect.setAttribute("x", x);
+        rect.setAttribute("y", y);
+        rect.setAttribute("width", w);
+        rect.setAttribute("height", h);
+        rect.setAttribute("rx", "8");
+        for (const a of ["fill", "stroke", "stroke-width", "class", "style"]) {
+          if (firstPath.hasAttribute(a))
+            rect.setAttribute(a, firstPath.getAttribute(a));
+        }
+        firstPath.replaceWith(rect);
+      });
+      document
+        .querySelectorAll(
+          "#erd svg.erDiagram .row-rect-odd path, #erd svg.erDiagram .row-rect-even path",
+        )
+        .forEach((p) => {
+          p.setAttribute("stroke", "none");
+        });
+    </script>
+  </body>
+</html>
