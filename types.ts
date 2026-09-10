@@ -3,9 +3,11 @@ export interface Users {
   userId: string;
   whatsappNumber: string;
   preferenceId: string;
+  password: string;
   is_active: boolean;
   created_at: string;
 }
+
 export interface JobPreference {
   id: string;
   userId: string;

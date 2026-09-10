@@ -1,3 +1,4 @@
+import "../config/loadEnv.js";
 import net from "net";
 net.setDefaultAutoSelectFamilyAttemptTimeout(1000);
 
@@ -11,4 +12,4 @@ pool.on("error", (err) => {
   return console.error("Something went wrong with DB connection", err);
 });
 
-module.exports = pool;
+export default pool;

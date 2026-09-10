@@ -3,7 +3,7 @@ import { runMatchingJob } from "../services/matchingService.js";
 
 export function startMatchJobsCron() {
   cron.schedule(
-    "* * * * * *",
+    "* * * * *",
     async () => {
       console.log("[cron] Starting daily job matching run...");
       try {
