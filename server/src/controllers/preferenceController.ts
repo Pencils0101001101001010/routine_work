@@ -36,12 +36,35 @@ export const getPreferences: RequestHandler = async (req, res, next) => {
       [userId],
     );
 
-    res.status(201).json(result.rows);
+    res.status(200).json(result.rows);
   } catch (error) {
     next(error);
   }
 };
 
-export const updatePreferences: RequestHandler = async (req, res, next) => {};
+export const updatePreferences: RequestHandler = async (req, res, next) => {
+  const { id } = req.params; //Preference id
+  const userId = req.userId;
+  const { job_title, location, active } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ error: "Not authenticated." });
+  }
+
+  try {
+    const result = await pool.query(
+      "UPDATE JOB_PREFERENCES SET job_title = COALESCE($1, job_title), location = COALESCE($2, location), active = COALESCE($3, active) WHERE user_id = $4 AND id = $5 RETURNING *",
+      [job_title, location, active, userId, id],
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Preference not found." });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const deletePreferences: RequestHandler = async (req, res, next) => {};
