@@ -14,7 +14,7 @@ export const addPreferences: RequestHandler = async (req, res, next) => {
   try {
     const result = await pool.query(
       "INSERT INTO JOB_PREFERENCES (user_id, job_title, location, active) VALUES ($1, $2, $3, $4) RETURNING * ",
-      [userId, jobTitle, location, active || true],
+      [userId, jobTitle, location, active ?? true],
     );
 
     res.status(201).json(result.rows[0]);
