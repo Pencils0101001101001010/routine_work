@@ -1,9 +1,9 @@
+import "../config/loadEnv.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import pool from "../db/db.js";
 import { JWT_SECRET } from "../config/env.js";
 import type { RequestHandler } from "express";
-import "../config/loadEnv.js";
 import { resolveMx } from "dns";
 
 const SALT_ROUNDS = 12;
@@ -100,9 +100,10 @@ export const login: RequestHandler = async (req, res, next) => {
 };
 
 export const me: RequestHandler = async (req, res, next) => {
+  const userId = req.userId;
   const result = await pool.query(
     "SELECT id, whatsapp_number FROM USERS WHERE id = $1",
-    [req.userId],
+    [userId],
   );
 
   if (result.rows.length === 0)

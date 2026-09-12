@@ -25,3 +25,5 @@ dist-ssr
 note-and-prep
 .env
 package-lock.json
+
+locations

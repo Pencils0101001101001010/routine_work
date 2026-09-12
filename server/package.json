@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
@@ -26,13 +26,16 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@types/jest": "^30.0.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "helmet": "^8.3.0",
+    "jest": "^30.5.1",
     "jsonwebtoken": "^9.0.3",
     "node-cron": "^4.6.0",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "ts-jest": "^29.4.12"
   }
 }
