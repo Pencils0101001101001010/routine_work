@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import pool from "../db/db.js";
 import { JWT_SECRET } from "../config/env.js";
 import type { RequestHandler } from "express";
-import { resolveMx } from "dns";
 
 const SALT_ROUNDS = 12;
 
