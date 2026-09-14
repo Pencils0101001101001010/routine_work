@@ -1,8 +1,8 @@
 export interface Users {
   id: string;
-  userId: string;
-  whatsappNumber: string;
-  preferenceId: string;
+  name: string;
+  email: string;
+  whatsapp_number: string;
   password: string;
   is_active: boolean;
   created_at: string;

@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import pool from "../db/db.js";
 import { JWT_SECRET } from "../config/env.js";
 import type { RequestHandler } from "express";
+import type { Users } from "../types/index.js";
 
 const SALT_ROUNDS = 12;
 
@@ -14,14 +15,27 @@ function signToken(userId: string) {
 }
 
 export const register: RequestHandler = async (req, res, next) => {
-  const { whatsapp_number, name, password } = req.body;
+  const { whatsapp_number, name, email, password } = req.body;
 
-  if (!whatsapp_number || !name || !password) {
-    return res.status(400).json({ error: "All fields are required" });
+  if (
+    !whatsapp_number ||
+    !name ||
+    !email ||
+    !password ||
+    whatsapp_number.length < 10
+  ) {
+    return res.status(400).json({
+      error: "All fields are required , Make sure number and email is valid.",
+    });
+  }
+  if (password.length < 8) {
+    return res
+      .status(400)
+      .json({ error: "Password must be longer than 8 characters. " });
   }
 
   try {
-    const exist = await pool.query(
+    const exist = await pool.query<Users>(
       "SELECT * FROM USERS WHERE whatsapp_number = $1",
       [whatsapp_number],
     );
@@ -29,7 +43,7 @@ export const register: RequestHandler = async (req, res, next) => {
     if (exist.rows.length > 0) {
       return res
         .status(409)
-        .json({ error: "A account with this number already exist." });
+        .json({ error: "A account with this details already exist." });
     }
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
@@ -38,8 +52,8 @@ export const register: RequestHandler = async (req, res, next) => {
 
     try {
       const userResult = await client.query(
-        "INSERT INTO USERS (whatsapp_number, name, password) VALUES ($1, $2, $3) RETURNING id, name",
-        [whatsapp_number, name, hashedPassword],
+        "INSERT INTO USERS (whatsapp_number, name, email ,password) VALUES ($1, $2, $3, $4) RETURNING id, whatsapp_number, name, email ",
+        [whatsapp_number, name, email, hashedPassword],
       );
 
       const user = userResult.rows[0];
@@ -63,7 +77,7 @@ export const login: RequestHandler = async (req, res, next) => {
     return res.status(400).json({ error: "All fields are require" });
   }
   try {
-    const result = await pool.query(
+    const result = await pool.query<Users>(
       "SELECT * FROM USERS WHERE whatsapp_number = $1",
       [whatsapp_number],
     );
@@ -90,6 +104,7 @@ export const login: RequestHandler = async (req, res, next) => {
       user: {
         id: user.id,
         name: user.name,
+        email: user.email,
         whatsapp_number: user.whatsapp_number,
       },
     });

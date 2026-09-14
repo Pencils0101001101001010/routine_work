@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import { runMatchingJob } from "../services/matchingService.js";
+// import { runMatchingJob } from "../services/matchingService.js";
 
 export function startMatchJobsCron() {
   cron.schedule(
@@ -7,7 +7,7 @@ export function startMatchJobsCron() {
     async () => {
       console.log("[cron] Starting daily job matching run...");
       try {
-        await runMatchingJob();
+        // await runMatchingJob();
         console.log("[cron] Job matching completed successfully.");
       } catch (err) {
         console.error("[cron] Job matching failed:", err);
