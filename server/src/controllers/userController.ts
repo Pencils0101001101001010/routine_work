@@ -52,8 +52,8 @@ export const register: RequestHandler = async (req, res, next) => {
 
     try {
       const userResult = await client.query(
-        "INSERT INTO USERS (whatsapp_number, name, email ,password) VALUES ($1, $2, $3, $4) RETURNING id, whatsapp_number, name, email ",
-        [whatsapp_number, name, email, hashedPassword],
+        "INSERT INTO USERS (whatsapp_number, name, email ,password, is_active) VALUES ($1, $2, $3, $4, $5) RETURNING id, whatsapp_number, name, email, is_active ",
+        [whatsapp_number, name, email, hashedPassword, true],
       );
 
       const user = userResult.rows[0];

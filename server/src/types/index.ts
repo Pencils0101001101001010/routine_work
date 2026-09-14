@@ -19,12 +19,18 @@ export interface JobPreference {
 
 export interface UserPreference extends JobPreference {
   whatsappNumber: string;
+  email: string;
 }
 
 export interface GroupedSearch {
   jobTitle: string;
   location: string;
-  users: { userId: string; whatsappNumber: string; preferenceId: string }[];
+  users: {
+    userId: string;
+    whatsappNumber: string;
+    email: string;
+    preferenceId: string;
+  }[];
 }
 
 export interface AdzunaJob {

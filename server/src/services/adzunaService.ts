@@ -5,13 +5,13 @@ export async function searchJobs(
   title: string,
   location: string,
 ): Promise<AdzunaJob[]> {
+  const appId = process.env.APP_ID || "----------noAppId------";
+  const appKey = process.env.APP_KEY || "----------noAppKey--------";
   const url = new URL(`${process.env.ADZUNA_BASE_URL}`);
-  url.searchParams.set("app_id", process.env.APP_ID!);
-  url.searchParams.set("app_key", process.env.APP_KEY!);
+  url.searchParams.set("app_id", appId);
+  url.searchParams.set("app_key", appKey);
   url.searchParams.set("what", title);
   url.searchParams.set("where", location);
-
-  console.log(`_____________Adzuna url ${url}________________\n`);
 
   const res = await fetch(url.toString());
 
