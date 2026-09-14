@@ -37,14 +37,6 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     return res.status(400).json({ error: "Referenced record does not exist." });
   }
 
-  // JWT errors from your auth middleware, if it throws instead of returning 401 itself
-  if (err instanceof Error && err.name === "JsonWebTokenError") {
-    return res.status(401).json({ error: "Invalid token." });
-  }
-  if (err instanceof Error && err.name === "TokenExpiredError") {
-    return res.status(401).json({ error: "Token expired." });
-  }
-
   // Fallback — unknown error, don't leak internals in production
   res.status(500).json({
     error: isDev ? (err as Error).message : "Something went wrong.",

@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
 import pool from "../db/db.js";
+import type { JobPreference } from "../types/index.js";
 
 export const addPreferences: RequestHandler = async (req, res, next) => {
   const { jobTitle, location, active } = req.body;
@@ -12,12 +13,12 @@ export const addPreferences: RequestHandler = async (req, res, next) => {
   }
 
   try {
-    const result = await pool.query(
+    const result = await pool.query<JobPreference>(
       "INSERT INTO JOB_PREFERENCES (user_id, job_title, location, active) VALUES ($1, $2, $3, $4) RETURNING * ",
       [userId, jobTitle, location, active ?? true],
     );
 
-    res.status(201).json(result.rows[0]);
+    return res.status(201).json(result.rows[0]);
   } catch (error) {
     next(error);
   }
@@ -31,7 +32,7 @@ export const getPreferences: RequestHandler = async (req, res, next) => {
   }
 
   try {
-    const result = await pool.query(
+    const result = await pool.query<JobPreference>(
       "SELECT * FROM JOB_PREFERENCES WHERE user_id = $1",
       [userId],
     );
@@ -42,7 +43,7 @@ export const getPreferences: RequestHandler = async (req, res, next) => {
         .json({ message: "No preferences set yet", preferences: [] });
     }
 
-    res.status(200).json(result.rows);
+    return res.status(200).json(result.rows);
   } catch (error) {
     next(error);
   }
@@ -67,7 +68,7 @@ export const updatePreferences: RequestHandler = async (req, res, next) => {
       return res.status(404).json({ error: "Preference not found." });
     }
 
-    res.status(200).json(result.rows[0]);
+    return res.status(200).json(result.rows[0]);
   } catch (error) {
     next(error);
   }
@@ -91,7 +92,7 @@ export const deletePreferences: RequestHandler = async (req, res, next) => {
       return res.status(404).json({ error: "Item not found." });
     }
 
-    res.status(204).send();
+    return res.status(204).send();
   } catch (error) {
     next(error);
   }
