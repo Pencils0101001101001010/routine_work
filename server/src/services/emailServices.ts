@@ -2,15 +2,26 @@ import { match } from "assert";
 import { transporter } from "../config/transporter.js";
 import type { JobMatch } from "../types/index.js";
 
-export async function sendMatchNotification(email: string, match: JobMatch) {
+export async function sendMatchNotification(
+  email: string,
+  match: JobMatch,
+): Promise<{
+  success: boolean;
+  reason?: string;
+  error?: unknown;
+  details?: unknown;
+  providerId?: string;
+}> {
   const titleIfNull = match.title || "Available vacancy";
   const companyIfNull = match.company || "We";
-  const res = await transporter.sendMail({
-    from: '"RoutineWorks" <kinpencils@gmail.com>',
-    to: email,
-    subject: `New match: ${titleIfNull} at ${companyIfNull}`,
-    text: `A new job matching your preferences was posted: ${titleIfNull} at ${companyIfNull}. Apply here: ${match.sourceUrl}`,
-    html: `
+
+  try {
+    const res = await transporter.sendMail({
+      from: '"RoutineWorks" <kinpencils@gmail.com>',
+      to: email,
+      subject: `New match: ${titleIfNull} at ${companyIfNull}`,
+      text: `A new job matching your preferences was posted: ${titleIfNull} at ${companyIfNull}. Apply here: ${match.sourceUrl}`,
+      html: `
        <div
       style="
         font-family: Arial, Helvetica, sans-serif;
@@ -100,7 +111,31 @@ export async function sendMatchNotification(email: string, match: JobMatch) {
       </p>
     </div>
     `,
-  });
+    });
 
-  console.log("Message sent: %s", res.messageId);
+    console.log("Message sent: %s", res.messageId);
+
+    if (res.rejected.length > 0) {
+      console.error(
+        `Email to ${email} was rejected:`,
+        res.rejectedErrors ?? res.rejected,
+      );
+      return {
+        success: false,
+        reason: "rejected",
+        details: res.rejectedErrors,
+      };
+    }
+    if (res.accepted.length > 0) {
+      console.log("Message sent: %s", res.messageId);
+      return { success: true, providerId: res.messageId };
+    }
+
+    //  neither accepted nor rejected populated
+    console.warn("Unexpected sendMail response:", res);
+    return { success: false, reason: "unknown" };
+  } catch (err) {
+    console.error(`Failed to send email to ${email}:`, err);
+    return { success: false, reason: "exception", error: err };
+  }
 }

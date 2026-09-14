@@ -17,6 +17,13 @@ export interface JobPreference {
   lastCheckedAt: Date | null;
 }
 
+export interface NotificationLog {
+  user_id: string;
+  job_match_id: string;
+  status: string;
+  sent_at: string;
+}
+
 export interface UserPreference extends JobPreference {
   whatsappNumber: string;
   email: string;

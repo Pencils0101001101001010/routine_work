@@ -7,6 +7,7 @@ import {
 import { searchJobs } from "../services/adzunaService.js";
 import { findNewMatches } from "../services/matchingService.js";
 import { sendMatchNotification } from "../services/emailServices.js";
+import { logNotification } from "../models/notificationModel.js";
 
 function groupByTitleAndLocation(
   prefs: Awaited<ReturnType<typeof getActivePreferences>>,
@@ -39,7 +40,11 @@ async function runMatchJob(): Promise<void> {
       for (const match of newMatches) {
         const result = await sendMatchNotification(user.email, match);
         console.log(`Email sent to ${user.email}`);
-        // await logNotification(user.userId, match.id, result.success ? "sent" : "failed");
+        await logNotification(
+          user.userId,
+          match.id,
+          result.success ? "sent" : "failed",
+        );
       }
 
       await markChecked(user.preferenceId);
@@ -48,5 +53,5 @@ async function runMatchJob(): Promise<void> {
 }
 
 export function startMatchJobsCron() {
-  cron.schedule("*0 8 * * *", runMatchJob);
+  cron.schedule("0 8 * * *", runMatchJob);
 } //"0 8 * * *" runs daily at 8am
