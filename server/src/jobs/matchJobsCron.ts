@@ -48,5 +48,5 @@ async function runMatchJob(): Promise<void> {
 }
 
 export function startMatchJobsCron() {
-  cron.schedule("*/40 * * * * *", runMatchJob);
+  cron.schedule("*0 8 * * *", runMatchJob);
 } //"0 8 * * *" runs daily at 8am
