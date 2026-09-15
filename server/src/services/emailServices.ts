@@ -99,12 +99,14 @@ export async function sendMatchNotification(
       <p style="font-size: 12px; color: #8a8a8a; line-height: 1.5; margin: 0">
         Jobs by
         <a href="http://www.adzuna.co.uk"
-          ><img
+          >
+        <img
             src="https://zunastatic-abf.kxcdn.com/assets/images/press/adzuna_logo/adzuna_logo.jpg"
             alt="Adzuna logo"
             width="50px"
             height="20px"
-        /></a>
+        />
+        </a>
         &nbsp;&middot;&nbsp; You're receiving this because you saved a job
         preference on RoutineWork.
       </p>
@@ -112,7 +114,7 @@ export async function sendMatchNotification(
     `,
     });
 
-    console.log("Message sent: %s", res.messageId);
+    // console.log("Message sent: %s", res.messageId);
 
     if (res.rejected.length > 0) {
       console.error(
@@ -126,7 +128,7 @@ export async function sendMatchNotification(
       };
     }
     if (res.accepted.length > 0) {
-      console.log("Message sent: %s", res.messageId);
+      // console.log("Message sent: %s", res.messageId);
       return { success: true, providerId: res.messageId };
     }
 

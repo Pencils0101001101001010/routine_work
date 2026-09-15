@@ -39,7 +39,7 @@ async function runMatchJob(): Promise<void> {
 
       for (const match of newMatches) {
         const result = await sendMatchNotification(user.email, match);
-        console.log(`Email sent to ${user.email}`);
+        // console.log(`Email sent to ${user.email}`);
         await logNotification(
           user.userId,
           match.id,
