@@ -1,4 +1,3 @@
-import { match } from "assert";
 import { transporter } from "../config/transporter.js";
 import type { JobMatch } from "../types/index.js";
 
@@ -12,8 +11,8 @@ export async function sendMatchNotification(
   details?: unknown;
   providerId?: string;
 }> {
-  const titleIfNull = match.title || "Available vacancy";
-  const companyIfNull = match.company || "We";
+  const titleIfNull = match.title || "an available vacancy";
+  const companyIfNull = match.company || "This company";
 
   try {
     const res = await transporter.sendMail({
@@ -53,7 +52,7 @@ export async function sendMatchNotification(
           color: #111111;
         "
       >
-        ${companyIfNull} now hiring a ${match.title}
+        ${companyIfNull} now hiring ${titleIfNull}
       </h1>
 
       <p
