@@ -27,7 +27,7 @@ function groupByTitleAndLocation(
   return [...map.values()];
 }
 
-async function runMatchJob(): Promise<void> {
+export async function runMatchJob(): Promise<void> {
   const preferences = await getActivePreferences();
   const groupedSearches = groupByTitleAndLocation(preferences);
 
