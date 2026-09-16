@@ -6,8 +6,6 @@ export const addPreferences: RequestHandler = async (req, res, next) => {
   const { jobTitle, location, active } = req.body;
   const userId = req.userId;
 
-  console.log(userId);
-
   if (!jobTitle || !location) {
     return res.status(400).json({ error: "All fields are required." });
   }
