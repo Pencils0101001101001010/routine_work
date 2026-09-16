@@ -13,10 +13,9 @@ export default defineConfig({
       manifest: {
         name: "RoutineWork",
         short_name: "RoutineWork",
-        description:
-          "Job alerts and routine tracking for job seekers, delivered via WhatsApp",
+        description: "Job alerts and routine tracking for job seekers.",
         theme_color: "#0F6E56",
-        background_color: "#0F6E56",
+        background_color: "#01ffbf",
         display: "standalone",
         orientation: "portrait",
         start_url: "/",
