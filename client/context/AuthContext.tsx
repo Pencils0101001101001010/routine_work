@@ -19,7 +19,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (whatsapp_number: string, password: string) => {
-    const res = await api.post("/api/user/login", {
+    const res = await api.post("/user/login", {
       whatsapp_number,
       password,
     });
@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     whatsapp_number: string,
     password: string,
   ) => {
-    const res = await api.post("/api/user/register", {
+    const res = await api.post("/user/register", {
       name,
       email,
       whatsapp_number,
