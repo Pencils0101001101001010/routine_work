@@ -6,14 +6,18 @@ import preferenceRoutes from "./routes/preferenceRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { startMatchJobsCron } from "./jobs/matchJobsCron.js";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 
 const app = express();
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    credentials: true,
-  }),
-);
+const allowedOrigins = (
+  process.env.CLIENT_URL ?? "http://localhost:5173,http://localhost:4173"
+)
+  .split(",")
+  .map((o) => o.trim());
+
+console.log("Allowed origins:", allowedOrigins);
+app.use(cors({ origin: allowedOrigins, credentials: true }));
+app.use(cookieParser());
 app.use(express.json());
 
 app.use(helmet());

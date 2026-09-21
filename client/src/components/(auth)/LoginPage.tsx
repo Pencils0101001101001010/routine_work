@@ -1,7 +1,7 @@
 import React, { useState, type SubmitEvent } from "react";
 import AuthButton from "../(reusable)/Button";
 import InputFields from "../(reusable)/InputFields";
-import logo from "../../../public/maskable-icon-512x512.png";
+import logo from "../../assets/maskable-icon-512x512.png";
 import { useAuth } from "../../../context/auth-context";
 import { toast } from "react-hot-toast";
 import type { AxiosError } from "axios";

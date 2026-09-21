@@ -1,6 +1,7 @@
 import { type Request, type Response, type NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/env.js";
+import { COOKIE_NAME } from "../config/cookie.js";
 import { isAuthTokenPayload } from "../types/auth.js";
 
 export default function requireAuth(
@@ -8,22 +9,10 @@ export default function requireAuth(
   res: Response,
   next: NextFunction,
 ) {
-  const header = req.headers.authorization;
-  // console.log("Raw auth header:", JSON.stringify(header));
+  const token = req.cookies?.[COOKIE_NAME];
 
-  if (!header || !header.startsWith("Bearer ")) {
-    return res
-      .status(401)
-      .json({ error: "Missing or malformed authorization header" });
-  }
-
-  const token = header.split(" ")[1];
-
-  // console.log(`Token: logged after split ${token}`);
-  // console.log("Token segments:", token?.split(".").length);
-  // console.log("Token length:", token?.length);
   if (!token) {
-    return res.status(401).json({ error: "Missing token" });
+    return res.status(401).json({ error: "Not authenticated" });
   }
 
   try {
@@ -35,8 +24,7 @@ export default function requireAuth(
 
     req.userId = payload.userId;
     next();
-  } catch (error) {
-    // console.error("JWT verify failed:", error);
+  } catch {
     return res.status(401).json({ error: "Invalid or expired token" });
   }
 }

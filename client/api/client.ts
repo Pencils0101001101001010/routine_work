@@ -1,33 +1,33 @@
 import axios, { AxiosError } from "axios";
-import type {
-  InternalAxiosRequestConfig,
-  AxiosInstance,
-  AxiosResponse,
-} from "axios";
+import type { AxiosInstance, AxiosResponse } from "axios";
 
 const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000/api",
+  withCredentials: true,
 });
 
-api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  {
-    const token = localStorage.getItem("token");
+// Lets AuthProvider react to a 401 without a page reload
+let onUnauthorized: (() => void) | null = null;
+export const setUnauthorizedHandler = (fn: (() => void) | null) => {
+  onUnauthorized = fn;
+};
 
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
-  }
-});
+const AUTH_PATHS = [
+  "/user/login",
+  "/user/register",
+  "/user/me",
+  "/user/logout",
+];
 
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (err: AxiosError) => {
-    const isAuthEndpoint =
-      err.config?.url?.includes("/auth/login") ||
-      err.config?.url?.includes("/auth/register");
+    const url = err.config?.url ?? "";
+    const isAuthCall = AUTH_PATHS.some((p) => url.includes(p));
 
-    if (err.response?.status === 401 && !isAuthEndpoint) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
+    // Session expired while using the app (not a login/me call)
+    if (err.response?.status === 401 && !isAuthCall) {
+      onUnauthorized?.();
     }
 
     return Promise.reject(err);

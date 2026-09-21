@@ -1,7 +1,9 @@
+import Navbar from "./Navbar";
+
 export default function LandingPage() {
   return (
-    <div>
-      <h2>Landing</h2>
+    <div className="h-screen">
+      <Navbar />
     </div>
   );
 }

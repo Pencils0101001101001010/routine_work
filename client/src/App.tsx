@@ -7,7 +7,7 @@ import LandingPage from "./components/LandingPage";
 
 function App() {
   return (
-    <div>
+    <div className="text-green-50">
       <BrowserRouter>
         <AuthProvider>
           <Toaster position="top-right" />

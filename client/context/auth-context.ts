@@ -11,7 +11,7 @@ export interface AuthContextValue {
     whatsapp_number: string,
     password: string,
   ) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
