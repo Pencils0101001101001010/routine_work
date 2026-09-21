@@ -84,7 +84,7 @@ export const login: RequestHandler = async (req, res, next) => {
   try {
     const result = await pool.query<Users>(
       "SELECT * FROM USERS WHERE whatsapp_number = $1",
-      [whatsapp_number],
+      [whatsapp_number.trim()],
     );
 
     const user = result.rows[0];

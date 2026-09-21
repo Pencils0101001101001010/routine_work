@@ -16,7 +16,7 @@ export interface AuthContextValue {
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
-export const useAth = () => {
+export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("UseAuth must be used within AuthProvider");
 

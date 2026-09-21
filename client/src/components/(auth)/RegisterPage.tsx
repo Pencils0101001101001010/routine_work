@@ -1,6 +1,6 @@
 import React, { useState, type SubmitEvent } from "react";
 import type { User } from "../../../types";
-import { useAth } from "../../../context/auth-context";
+import { useAuth } from "../../../context/auth-context";
 import InputFields from "../(reusable)/InputFields";
 import AuthButton from "../(reusable)/Button";
 import { toast } from "react-hot-toast";
@@ -16,7 +16,7 @@ export default function RegisterPage() {
     whatsapp_number: "",
     password: "",
   });
-  const { register } = useAth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
