@@ -5,7 +5,7 @@ import InputFields from "../(reusable)/InputFields";
 import AuthButton from "../(reusable)/Button";
 import { toast } from "react-hot-toast";
 import type { AxiosError } from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../public/maskable-icon-512x512.png";
 
 export default function RegisterPage() {
@@ -110,6 +110,15 @@ export default function RegisterPage() {
       >
         {isRegistering ? "Registering..." : "Register"}
       </AuthButton>
+      <p>
+        Have an account?{" "}
+        <Link
+          to={"/login"}
+          className="underline text-green-900 hover:text-green-400"
+        >
+          Login
+        </Link>
+      </p>
     </form>
   );
 }
