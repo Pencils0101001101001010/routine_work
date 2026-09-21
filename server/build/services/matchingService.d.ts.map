@@ -1,0 +1,1 @@
+{"version":3,"file":"matchingService.d.ts","sourceRoot":"","sources":["../../src/services/matchingService.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,SAAS,EAAE,QAAQ,EAAE,MAAM,mBAAmB,CAAC;AAE7D,wBAAsB,cAAc,CAClC,YAAY,EAAE,MAAM,EACpB,IAAI,EAAE,SAAS,EAAE,GAChB,OAAO,CAAC,QAAQ,EAAE,CAAC,CAgCrB"}
