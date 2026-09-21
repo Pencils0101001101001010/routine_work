@@ -28,6 +28,11 @@ export const register: RequestHandler = async (req, res, next) => {
       error: "All fields are required , Make sure number and email is valid.",
     });
   }
+
+  if (whatsapp_number.length > 10) {
+    return res.status(400).json({ error: "Phone number must be 10 digits" });
+  }
+
   if (password.length < 8) {
     return res
       .status(400)

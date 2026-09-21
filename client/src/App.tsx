@@ -7,16 +7,18 @@ import LandingPage from "./components/LandingPage";
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <Toaster position="top-right" />
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/" element={<LandingPage />} />
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
+    <div>
+      <BrowserRouter>
+        <AuthProvider>
+          <Toaster position="top-right" />
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/" element={<LandingPage />} />
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+    </div>
   );
 }
 

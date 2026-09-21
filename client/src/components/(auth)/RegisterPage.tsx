@@ -6,6 +6,7 @@ import AuthButton from "../(reusable)/Button";
 import { toast } from "react-hot-toast";
 import type { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
+import logo from "../../../public/maskable-icon-512x512.png";
 
 export default function RegisterPage() {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -21,8 +22,6 @@ export default function RegisterPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    // console.log(`Name: ${name} Value: ${value}`);
-
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -33,9 +32,6 @@ export default function RegisterPage() {
     e.preventDefault();
     setIsRegistering(true);
     try {
-      if (!formData.name || formData.name) {
-        // handle response here?
-      }
       await toast.promise(
         register(
           formData.name,
@@ -61,7 +57,17 @@ export default function RegisterPage() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col items-center justify-center h-screen text-green-50"
+    >
+      <img
+        src={logo}
+        alt="Routine Works logo"
+        className="w-36 h-36 rounded-full"
+      />
+      <p className="text-2xl mb-4  font-extrabold  ">Routine Works!</p>
+
       <InputFields
         type="text"
         name="name"
@@ -80,7 +86,6 @@ export default function RegisterPage() {
         value={formData.email}
         required
       />
-
       <InputFields
         type="tel"
         name="whatsapp_number"
@@ -89,7 +94,6 @@ export default function RegisterPage() {
         value={formData.whatsapp_number}
         required
       />
-
       <InputFields
         type="password"
         name="password"
@@ -99,7 +103,11 @@ export default function RegisterPage() {
         required
       />
 
-      <AuthButton type="submit" disabled={isRegistering}>
+      <AuthButton
+        type="submit"
+        disabled={isRegistering}
+        isSubmitting={isRegistering}
+      >
         {isRegistering ? "Registering..." : "Register"}
       </AuthButton>
     </form>
