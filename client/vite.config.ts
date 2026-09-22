@@ -13,6 +13,7 @@ export default defineConfig({
       includeAssets: ["favicon-32x32.png", "apple-touch-icon.png"],
       workbox: {
         navigateFallbackDenylist: [/^\/robots\.txt$/, /^\/sitemap\.xml$/],
+        globPatterns: ["**/*.{js,css,html,jpg,jpeg,png,svg,webp,ico}"],
       },
       manifest: {
         name: "Routine Works",

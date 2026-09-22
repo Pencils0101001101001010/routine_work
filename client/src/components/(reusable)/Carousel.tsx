@@ -37,7 +37,7 @@ export default function Carousel() {
       setTimeout(() => {
         imageDispatch({ type: "NEXT" });
         setFade(true);
-      }, 800);
+      }, 900);
     }, 9000);
     return () => clearInterval(id);
   }, []);
