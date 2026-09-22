@@ -18,7 +18,7 @@ export default function Navbar() {
 
       {user ? (
         <menu className="flex  items-center gap-2 ">
-          <li>Profile</li>
+          <Link to={"/profile"}>Profile</Link>
           <li>
             <button onClick={logout}>Logout</button>
           </li>
