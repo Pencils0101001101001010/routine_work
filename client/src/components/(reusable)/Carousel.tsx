@@ -59,18 +59,18 @@ export default function Carousel() {
         alt={current.alt}
         className={`w-full object-contain h-full  md:object-cover md:h-[clamp(400px,60vh,700px)] object-left md:object-center transition-opacity duration-500 ${fade ? "opacity-80" : "opacity-0"}`}
       />
-
+      {/* <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/70 to-transparent pointer-events-none" /> */}
       <button
-        className="absolute text-xs md:text-1xl top-1/2 left-4 text-green-50 p-2 bg-stone-500/50 rounded-2xl hover:bg-stone-500 hover:text-green-500"
+        className="absolute text-xs md:text-1xl top-1/2 left-4 text-green-50 p-2 bg-stone-500/50 rounded-full hover:bg-stone-500 hover:text-green-500"
         onClick={handlePrev}
       >
-        Prev
+        ←
       </button>
       <button
-        className="absolute text-xs md:text-1xl top-1/2 right-4 text-green-50 p-2 bg-stone-500/50 rounded-2xl hover:bg-stone-500 hover:text-green-500"
+        className="absolute text-xs md:text-1xl top-1/2 right-4 text-green-50 p-2 bg-stone-500/50 rounded-full hover:bg-stone-500 hover:text-green-500"
         onClick={handleSkip}
       >
-        Skip
+        →
       </button>
     </div>
   );

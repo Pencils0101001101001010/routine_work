@@ -6,7 +6,7 @@ export default function Navbar() {
   const { logout, user } = useAuth();
 
   return (
-    <nav className="flex flex-row items-center justify-between px-4 h-12 border-gree border-b-2">
+    <nav className="flex flex-row items-center justify-between px-4 h-12 ">
       <div className="flex items-center ">
         <img
           src={logo}
