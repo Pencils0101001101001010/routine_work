@@ -114,7 +114,7 @@ export default function RegisterPage() {
         Have an account?{" "}
         <Link
           to={"/login"}
-          className="underline text-green-900 hover:text-green-400"
+          className="underline text-green-600 hover:text-green-400"
         >
           Login
         </Link>

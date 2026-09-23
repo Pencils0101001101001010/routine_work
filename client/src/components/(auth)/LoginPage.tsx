@@ -80,7 +80,7 @@ export default function LoginPage() {
         Don't have an account?{" "}
         <Link
           to={"/register"}
-          className="underline text-green-900 hover:text-green-400"
+          className="underline text-green-600 hover:text-green-400"
         >
           Register
         </Link>
