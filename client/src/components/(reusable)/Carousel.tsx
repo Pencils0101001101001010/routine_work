@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import jobImage from "../../assets/job1.jpg";
 import embrace from "../../assets/embrace.jpg";
 import positive from "../../assets/positive.jpg";
@@ -9,19 +9,14 @@ const IMAGE = [
   { id: 3, imgUrl: positive, alt: "positive discipline" },
 ];
 
-type Action = {
-  type: "NEXT" | "PREV";
-};
+type Action = { type: "NEXT" | "PREV" };
 
 const rollOver = (index: number, action: Action): number => {
   switch (action.type) {
     case "NEXT":
       return (index + 1) % IMAGE.length;
     case "PREV":
-      if (index === 0) {
-        return IMAGE.length - 1;
-      }
-      return index - 1;
+      return index === 0 ? IMAGE.length - 1 : index - 1;
     default:
       return index;
   }
@@ -29,37 +24,33 @@ const rollOver = (index: number, action: Action): number => {
 
 export default function Carousel() {
   const [currentImage, imageDispatch] = useReducer(rollOver, 0);
-  const [fade, setFade] = useState(true);
 
   useEffect(() => {
     const id = setInterval(() => {
-      setFade(false);
-      setTimeout(() => {
-        imageDispatch({ type: "NEXT" });
-        setFade(true);
-      }, 900);
+      imageDispatch({ type: "NEXT" });
     }, 9000);
     return () => clearInterval(id);
   }, []);
 
-  const handlePrev = () => {
-    imageDispatch({ type: "PREV" });
-  };
-
-  const handleSkip = () => {
-    imageDispatch({ type: "NEXT" });
-  };
-
-  const current = IMAGE[currentImage];
+  const handlePrev = () => imageDispatch({ type: "PREV" });
+  const handleSkip = () => imageDispatch({ type: "NEXT" });
 
   return (
-    <div className="flex flex-col relative  ">
-      <img
-        src={current.imgUrl}
-        alt={current.alt}
-        className={`w-full object-contain h-full  md:object-cover md:h-[clamp(400px,60vh,700px)] object-left md:object-center transition-opacity duration-500 ${fade ? "opacity-80" : "opacity-0"}`}
-      />
-      {/* <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/70 to-transparent pointer-events-none" /> */}
+    <div className="relative overflow-hidden">
+      <div
+        className="flex transition-transform duration-700 ease-in-out"
+        style={{ transform: `translateX(-${currentImage * 100}%)` }}
+      >
+        {IMAGE.map((img) => (
+          <img
+            key={img.id}
+            src={img.imgUrl}
+            alt={img.alt}
+            className="w-full shrink-0 object-contain h-full md:object-cover md:h-[clamp(400px,60vh,700px)] object-left md:object-center"
+          />
+        ))}
+      </div>
+
       <button
         className="absolute text-xs md:text-1xl top-1/2 left-4 text-green-50 p-2 bg-stone-500/50 rounded-full hover:bg-stone-500 hover:text-green-500"
         onClick={handlePrev}
