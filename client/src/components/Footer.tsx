@@ -20,7 +20,7 @@ export default function Footer() {
             altTitle="Adzuna logo"
           />
           <ListItem
-            title="Develop by SJ Pencils"
+            title="Developed by SJ Pencils"
             linkUrl="https://github.com/Pencils0101001101001010"
           />
         </ul>
