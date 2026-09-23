@@ -2,18 +2,33 @@ import type { RequestHandler } from "express";
 import pool from "../db/db.js";
 import type { JobPreference } from "../types/index.js";
 
+const MAX_PREFERENCES = 5;
+
 export const addPreferences: RequestHandler = async (req, res, next) => {
-  const { jobTitle, location, active } = req.body;
+  const { job_title, location, active } = req.body;
   const userId = req.userId;
 
-  if (!jobTitle || !location) {
+  if (!job_title || !location) {
     return res.status(400).json({ error: "All fields are required." });
   }
 
   try {
+    const countResult = await pool.query(
+      "SELECT COUNT(*) FROM job_preferences WHERE user_id = $1",
+      [userId],
+    );
+
+    const currentCount = parseInt(countResult.rows[0].count, 10);
+
+    if (currentCount >= MAX_PREFERENCES) {
+      return res.status(429).json({
+        error: `You've reached the maximum of ${MAX_PREFERENCES} job preferences. Delete one to add another.`,
+      });
+    }
+
     const result = await pool.query<JobPreference>(
       "INSERT INTO JOB_PREFERENCES (user_id, job_title, location, active) VALUES ($1, $2, $3, $4) RETURNING * ",
-      [userId, jobTitle, location, active ?? true],
+      [userId, job_title, location, active ?? true],
     );
 
     return res.status(201).json(result.rows[0]);
@@ -35,11 +50,9 @@ export const getPreferences: RequestHandler = async (req, res, next) => {
       [userId],
     );
 
-    if (result.rows.length <= 0) {
-      return res
-        .status(200)
-        .json({ message: "No preferences set yet", preferences: [] });
-    }
+    // if (result.rows.length === 0) {
+    //   return res.status(204).json({ error: "No preferences set yet" });
+    // }
 
     return res.status(200).json(result.rows);
   } catch (error) {

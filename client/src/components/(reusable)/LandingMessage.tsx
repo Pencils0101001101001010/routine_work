@@ -18,7 +18,7 @@ export default function LandingMessage() {
         <InfoTiles
           title="Step 2"
           description="Create preferences. Follow link below. Once you there add new preferences."
-          linkUrl="/register"
+          linkUrl="/preferences"
           linkLabel="Go to Preference"
         />
 

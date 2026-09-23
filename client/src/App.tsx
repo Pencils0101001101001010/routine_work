@@ -4,8 +4,9 @@ import { Toaster } from "react-hot-toast";
 import LoginPage from "./components/(auth)/LoginPage";
 import RegisterPage from "./components/(auth)/RegisterPage";
 import LandingPage from "./components/LandingPage";
-import Profile from "./components/Profile";
 import { useAuth } from "../context/auth-context";
+import Navbar from "./components/Navbar";
+import Preferences from "./components/Preferences";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <Toaster position="top-right" />
+          <Navbar />
           <AppRoutes />
         </AuthProvider>
       </BrowserRouter>
@@ -30,8 +32,8 @@ function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route
-        path="/profile"
-        element={user ? <Profile /> : <Navigate to="/login" replace />}
+        path="/preferences"
+        element={user ? <Preferences /> : <Navigate to="/login" replace />}
       />
       <Route path="/" element={<LandingPage />} />
     </Routes>

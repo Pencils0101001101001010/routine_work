@@ -11,7 +11,6 @@ const app = express();
 const allowedOrigins = (process.env.CLIENT_URL ?? "http://localhost:5173,http://localhost:4173")
     .split(",")
     .map((o) => o.trim());
-console.log("Allowed origins:", allowedOrigins);
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(cookieParser());
 app.use(express.json());

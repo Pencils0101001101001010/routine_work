@@ -9,10 +9,8 @@ export interface User {
 }
 
 export interface JobPreference {
-  id: string;
-  userId: string;
-  jobTitle: string;
+  id?: string;
+  user_id?: string;
+  job_title: string;
   location: string;
-  active: boolean;
-  lastCheckedAt: Date | null;
 }

@@ -7,19 +7,22 @@ export default function Navbar() {
 
   return (
     <nav className="flex flex-row items-center justify-between px-4 h-12 ">
-      <div className="flex items-center ">
+      <Link to={"/"} className="flex items-center ">
         <img
           src={logo}
           alt="Routine Work logo"
           className="w-8 h-8 rounded-full"
         />
         <p className="pl-2 font-extrabold">Routine Works</p>
-      </div>
+      </Link>
 
       {user ? (
         <menu className="flex  items-center gap-2 ">
-          <Link to={"/profile"}>Profile</Link>
-          <li>
+          <Link to={"/preferences"} className="hover:text-green-400">
+            Preferences
+          </Link>
+          |
+          <li className="hover:text-green-400">
             <button onClick={logout}>Logout</button>
           </li>
         </menu>
