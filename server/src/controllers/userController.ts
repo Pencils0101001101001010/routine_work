@@ -9,6 +9,8 @@ import { COOKIE_NAME, cookieOptions } from "../config/cookie.js";
 
 const SALT_ROUNDS = 12;
 
+//! ADD CONTROLLER FOR USERS TO DELETE ACCOUNTS
+
 function signToken(userId: string) {
   return jwt.sign({ userId }, JWT_SECRET, {
     expiresIn: "1d",
