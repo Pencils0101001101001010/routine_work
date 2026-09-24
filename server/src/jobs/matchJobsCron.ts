@@ -43,6 +43,8 @@ export async function runMatchJob(): Promise<void> {
         await logNotification(
           user.userId,
           match.id,
+          match.title,
+          match.company,
           result.success ? "sent" : "failed",
         );
       }
@@ -55,3 +57,4 @@ export async function runMatchJob(): Promise<void> {
 export function startMatchJobsCron() {
   cron.schedule("0 8 * * *", runMatchJob);
 } //"0 8 * * *" runs daily at 8am
+//*/40 * * * * * this is every 40 sec

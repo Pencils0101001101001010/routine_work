@@ -3,6 +3,7 @@ import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
 import authRoutes from "./routes/userRoutes.js";
 import preferenceRoutes from "./routes/preferenceRoutes.js";
+import activeLogs from "./routes/activityRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { startMatchJobsCron } from "./jobs/matchJobsCron.js";
 import helmet from "helmet";
@@ -20,6 +21,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use(helmet());
+app.use("/api/active", activeLogs);
 app.use("/api/user", authRoutes);
 app.use("/api/job", preferenceRoutes);
 startMatchJobsCron();
