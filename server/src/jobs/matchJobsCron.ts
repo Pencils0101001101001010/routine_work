@@ -32,24 +32,36 @@ export async function runMatchJob(): Promise<void> {
   const groupedSearches = groupByTitleAndLocation(preferences);
 
   for (const search of groupedSearches) {
-    const jobs = await searchJobs(search.jobTitle, search.location);
+    let jobs;
+    try {
+      jobs = await searchJobs(search.jobTitle, search.location);
+    } catch (err) {
+      console.error(
+        `Skipping search "${search.jobTitle}" in "${search.location}" — Adzuna fetch failed:`,
+        err,
+      );
+      continue; // move to the next search, don't mark these preferences checked
+    }
 
     for (const user of search.users) {
-      const newMatches = await findNewMatches(user.preferenceId, jobs);
+      try {
+        const newMatches = await findNewMatches(user.preferenceId, jobs);
 
-      for (const match of newMatches) {
-        const result = await sendMatchNotification(user.email, match);
-        // console.log(`Email sent to ${user.email}`);
-        await logNotification(
-          user.userId,
-          match.id,
-          match.title,
-          match.company,
-          result.success ? "sent" : "failed",
-        );
+        for (const match of newMatches) {
+          const result = await sendMatchNotification(user.email, match);
+          await logNotification(
+            user.userId,
+            match.id,
+            match.title,
+            match.company,
+            result.success ? "sent" : "failed",
+          );
+        }
+      } catch (err) {
+        console.error(`Error processing preference ${user.preferenceId}:`, err);
+      } finally {
+        await markChecked(user.preferenceId);
       }
-
-      await markChecked(user.preferenceId);
     }
   }
 }
