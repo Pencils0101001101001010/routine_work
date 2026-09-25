@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AuthButton from "./(reusable)/Button";
 import InputFields from "./(reusable)/InputFields";
-import type { JobPreference, NotificationLog } from "../../types";
+import type { JobPreference } from "../../types";
 import { toast } from "react-hot-toast";
 import api from "../../api/client";
 import type { AxiosError } from "axios";
