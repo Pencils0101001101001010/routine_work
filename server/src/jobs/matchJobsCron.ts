@@ -32,6 +32,8 @@ export async function runMatchJob(): Promise<void> {
   const groupedSearches = groupByTitleAndLocation(preferences);
   const MAX_RETRIES = 2;
 
+  console.log("-------------Starting Cron Job----------------");
+
   for (const search of groupedSearches) {
     let jobs;
     try {
@@ -69,6 +71,7 @@ export async function runMatchJob(): Promise<void> {
             result.success ? "sent" : "failed",
           );
         }
+        console.log("-------------Finished with cron job-------------------");
       } catch (err) {
         console.error(`Error processing preference ${user.preferenceId}:`, err);
       } finally {
