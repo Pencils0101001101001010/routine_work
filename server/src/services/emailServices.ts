@@ -18,7 +18,7 @@ export async function sendMatchNotification(
   try {
     const { data, error } = await resend.emails.send({
       //once verified use : RoutineWorks <update.gisteraand.co.za>
-      from: "RoutineWorks <routineWorks@update.gisteraand.co.za>",
+      from: "RoutineWorks <notifications@update.gisteraand.co.za>",
       to: email,
       subject: `New match: ${titleIfNull} at ${companyIfNull}`,
       text: `A new job matching your preferences was posted: ${titleIfNull} at ${companyIfNull}. Apply here: ${match.sourceUrl}`,
