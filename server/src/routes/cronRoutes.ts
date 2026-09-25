@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { runMatchJob } from "../jobs/matchJobsCron.js";
 
+// Create a endpoint for github work flow to hit every day at 8am
+
 const router = Router();
 
 router.post("/run-match-job", async (req, res) => {

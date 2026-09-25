@@ -13,5 +13,5 @@ jobs:
     steps:
       - name: Call match job endpoint
         run: |
-          curl -X POST https://api.gisteraand.co.za/api/cron/run-match-job \
+          curl -f -X POST https://api.gisteraand.co.za/api/cron/run-match-job \
           -H "x-cron-secret: ${{ secrets.CRON_SECRET }}"

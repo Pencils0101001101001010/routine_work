@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AuthButton from "./(reusable)/Button";
 import InputFields from "./(reusable)/InputFields";
-import type { JobPreference } from "../../types";
+import type { JobPreference, NotificationLog } from "../../types";
 import { toast } from "react-hot-toast";
 import api from "../../api/client";
 import type { AxiosError } from "axios";
@@ -13,6 +13,7 @@ export default function Preferences() {
     location: "",
   });
   const [jobPreference, setJobPreferences] = useState<JobPreference[]>([]);
+  // const [userHistory, setUserHistory] = useState<NotificationLog[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const getPreferences = async () => {
@@ -32,6 +33,8 @@ export default function Preferences() {
       setJobPreferences(result.data);
     } catch (error) {}
   };
+
+  // const getUserHistory = async () => {};
 
   const onDelete = async (id: any) => {
     setIsLoading(true);
@@ -90,6 +93,7 @@ export default function Preferences() {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     getPreferences();
   }, []);

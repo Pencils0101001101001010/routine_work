@@ -14,3 +14,13 @@ export interface JobPreference {
   job_title: string;
   location: string;
 }
+
+export interface NotificationLog {
+  id?: string;
+  user_id?: string;
+  job_match_id?: string;
+  status?: string;
+  sent_at?: string;
+  job_title?: string;
+  company?: string;
+}
