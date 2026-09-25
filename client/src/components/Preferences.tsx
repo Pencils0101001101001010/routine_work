@@ -64,6 +64,12 @@ export default function Preferences() {
     e.preventDefault();
     setIsLoading(true);
     try {
+      if (formData.location.length > 5) {
+        return toast.error(
+          "Location requires a valid Zip Code e.g 8001 for cape town",
+        );
+      }
+
       await toast.promise(
         api.post("/job/preference", {
           job_title: formData.job_title,
@@ -111,7 +117,7 @@ export default function Preferences() {
             onChange={handleChange}
             value={formData.location}
             inputLabel="Location"
-            placeholder="Area name or postal code"
+            placeholder="Enter area postal code: 8001"
           />
         </span>
         <span className="flex items-center justify-center ">
@@ -149,7 +155,7 @@ export default function Preferences() {
                         type="button"
                         onClick={() => onDelete(j.id)}
                       >
-                        {isLoading ? "Deleting..." : "Delete"}
+                        Delete
                       </AuthButton>
                     </td>
                   </tr>

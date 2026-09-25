@@ -24,7 +24,7 @@ export default function HeroSection() {
       <Carousel />
       <LandingMessage />
       <div className="flex flex-col items-center justify-center mb-12 text-3xl">
-        <div>Current job matches sent :</div>
+        <div>Total job matches we've sent :</div>
         <div className="text-green-300 font-extrabold"> {currentSentJobs}</div>
       </div>
     </section>
