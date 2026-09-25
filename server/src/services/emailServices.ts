@@ -3,6 +3,8 @@ import type { JobMatch } from "../types/index.js";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+console.log(`-----${process.env.RESEND_API_KEY}-------------`);
+
 export async function sendMatchNotification(
   email: string,
   match: JobMatch,
