@@ -29,7 +29,7 @@ export async function runMatchJob() {
             for (const match of newMatches) {
                 const result = await sendMatchNotification(user.email, match);
                 // console.log(`Email sent to ${user.email}`);
-                await logNotification(user.userId, match.id, result.success ? "sent" : "failed");
+                await logNotification(user.userId, match.id, match.title, match.company, result.success ? "sent" : "failed");
             }
             await markChecked(user.preferenceId);
         }
@@ -38,4 +38,5 @@ export async function runMatchJob() {
 export function startMatchJobsCron() {
     cron.schedule("0 8 * * *", runMatchJob);
 } //"0 8 * * *" runs daily at 8am
+//*/40 * * * * * this is every 40 sec
 //# sourceMappingURL=matchJobsCron.js.map

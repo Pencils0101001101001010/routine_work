@@ -1,1 +1,1 @@
-{"version":3,"file":"activityController.d.ts","sourceRoot":"","sources":["../../src/controllers/activityController.ts"],"names":[],"mappings":""}
+{"version":3,"file":"activityController.d.ts","sourceRoot":"","sources":["../../src/controllers/activityController.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,cAAc,EAAE,MAAM,SAAS,CAAC;AAG9C,eAAO,MAAM,WAAW,EAAE,cAuBzB,CAAC;AAEF,eAAO,MAAM,gBAAgB,EAAE,cAU9B,CAAC"}

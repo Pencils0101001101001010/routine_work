@@ -95,6 +95,21 @@ export const logout = (_req, res) => {
     res.clearCookie(COOKIE_NAME, clearOptions);
     res.status(204).end();
 };
+export const deleteUser = async (req, res, next) => {
+    const userId = req.userId;
+    try {
+        const result = await pool.query("DELETE FROM USERS WHERE id = $1", [
+            userId,
+        ]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Item not found." });
+        }
+        res.status(204).send();
+    }
+    catch (error) {
+        next(error);
+    }
+};
 export const me = async (req, res, next) => {
     try {
         const userId = req.userId;

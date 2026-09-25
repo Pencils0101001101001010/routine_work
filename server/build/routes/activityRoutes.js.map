@@ -1,1 +1,1 @@
-{"version":3,"file":"activityRoutes.js","sourceRoot":"","sources":["../../src/routes/activityRoutes.ts"],"names":[],"mappings":""}
+{"version":3,"file":"activityRoutes.js","sourceRoot":"","sources":["../../src/routes/activityRoutes.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,MAAM,SAAS,CAAC;AAC9B,OAAO,WAAW,MAAM,8BAA8B,CAAC;AACvD,OAAO,EACL,gBAAgB,EAChB,WAAW,GACZ,MAAM,sCAAsC,CAAC;AAE9C,MAAM,MAAM,GAAG,OAAO,CAAC,MAAM,EAAE,CAAC;AAEhC,MAAM,CAAC,GAAG,CAAC,cAAc,EAAE,WAAW,EAAE,WAAW,CAAC,CAAC;AACrD,MAAM,CAAC,GAAG,CAAC,eAAe,EAAE,gBAAgB,CAAC,CAAC;AAE9C,eAAe,MAAM,CAAC"}

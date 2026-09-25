@@ -1,7 +1,7 @@
 import { transporter } from "../config/transporter.js";
 export async function sendMatchNotification(email, match) {
     const titleIfNull = match.title || "an available vacancy";
-    const companyIfNull = match.company || "This company";
+    const companyIfNull = match.company || "This company is";
     try {
         const res = await transporter.sendMail({
             from: '"RoutineWorks" <kinpencils@gmail.com>',
@@ -40,7 +40,7 @@ export async function sendMatchNotification(email, match) {
           color: #111111;
         "
       >
-        ${companyIfNull} now hiring ${titleIfNull}
+        ${companyIfNull} now hiring a ${titleIfNull}
       </h1>
 
       <p
@@ -97,6 +97,7 @@ export async function sendMatchNotification(email, match) {
         </a>
         &nbsp;&middot;&nbsp; You're receiving this because you saved a job
         preference on RoutineWork.
+        To unsubscribe login in to you profile to delete preferences 
       </p>
     </div>
     `,
