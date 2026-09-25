@@ -13,7 +13,6 @@ export default function Preferences() {
     location: "",
   });
   const [jobPreference, setJobPreferences] = useState<JobPreference[]>([]);
-  // const [userHistory, setUserHistory] = useState<NotificationLog[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const getPreferences = async () => {
@@ -33,8 +32,6 @@ export default function Preferences() {
       setJobPreferences(result.data);
     } catch (error) {}
   };
-
-  // const getUserHistory = async () => {};
 
   const onDelete = async (id: any) => {
     setIsLoading(true);
