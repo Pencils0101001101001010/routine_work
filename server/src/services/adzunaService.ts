@@ -19,8 +19,10 @@ export async function searchJobs(
 
   const res = await fetch(url.toString());
 
-  if (!res.ok) throw new Error(`Adzuna request fail: ${res.status}`);
-
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Adzuna request fail: ${res.status} — ${body}`);
+  }
   const data = await res.json();
   return data.results as AdzunaJob[];
 }
