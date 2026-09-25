@@ -9,8 +9,6 @@ import { COOKIE_NAME, cookieOptions } from "../config/cookie.js";
 
 const SALT_ROUNDS = 12;
 
-//! ADD CONTROLLER FOR USERS TO DELETE ACCOUNTS
-
 function signToken(userId: string) {
   return jwt.sign({ userId }, JWT_SECRET, {
     expiresIn: "1d",
@@ -126,6 +124,24 @@ export const logout: RequestHandler = (_req, res) => {
   const { maxAge, ...clearOptions } = cookieOptions;
   res.clearCookie(COOKIE_NAME, clearOptions);
   res.status(204).end();
+};
+
+export const deleteUser: RequestHandler = async (req, res, next) => {
+  const userId = req.userId;
+
+  try {
+    const result = await pool.query("DELETE FROM USERS WHERE id = $1", [
+      userId,
+    ]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Item not found." });
+    }
+
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const me: RequestHandler = async (req, res, next) => {

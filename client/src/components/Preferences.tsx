@@ -5,6 +5,7 @@ import type { JobPreference } from "../../types";
 import { toast } from "react-hot-toast";
 import api from "../../api/client";
 import type { AxiosError } from "axios";
+import TableHead from "./(reusable)/TableHead";
 
 export default function Preferences() {
   const [formData, setFormData] = useState<JobPreference>({
@@ -50,10 +51,6 @@ export default function Preferences() {
     }
   };
 
-  useEffect(() => {
-    getPreferences();
-  }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -93,6 +90,9 @@ export default function Preferences() {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    getPreferences();
+  }, []);
 
   return (
     <div className="h-screen">
@@ -124,15 +124,9 @@ export default function Preferences() {
         <table className=" min-w-3/4">
           <thead>
             <tr>
-              <th className="px-8 py-4 text-left border-2 border-green-800">
-                Job Title
-              </th>
-              <th className="px-8 py-4 text-left border-2 border-green-800">
-                Location
-              </th>
-              <th className="px-8 py-4 text-left border-2 border-green-800">
-                Action
-              </th>
+              <TableHead title="Job Title" />
+              <TableHead title="Location" />
+              <TableHead title="Action" />
             </tr>
           </thead>
           <tbody>

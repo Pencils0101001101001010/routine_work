@@ -7,9 +7,7 @@ import {
 
 const router = express.Router();
 
-router.use(requireAuth);
-
-router.get("/jobMatchers", getSentJobs);
+router.get("/jobMatchers", requireAuth, getSentJobs);
 router.get("/currentCount", getJobsSentCount);
 
 export default router;
