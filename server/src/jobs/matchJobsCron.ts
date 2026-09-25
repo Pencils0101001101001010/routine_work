@@ -30,6 +30,7 @@ function groupByTitleAndLocation(
 export async function runMatchJob(): Promise<void> {
   const preferences = await getActivePreferences();
   const groupedSearches = groupByTitleAndLocation(preferences);
+  const MAX_RETRIES = 2;
 
   for (const search of groupedSearches) {
     let jobs;
@@ -48,7 +49,18 @@ export async function runMatchJob(): Promise<void> {
         const newMatches = await findNewMatches(user.preferenceId, jobs);
 
         for (const match of newMatches) {
-          const result = await sendMatchNotification(user.email, match);
+          let result = await sendMatchNotification(user.email, match);
+
+          for (let i = 0; i < MAX_RETRIES; i++) {
+            //retry failed mails
+            if (!result.success) {
+              console.warn(`Retry ${i + 1} for ${user.email} (${match.title})`);
+              await new Promise((resolve) => setTimeout(resolve, 1500));
+              result = await sendMatchNotification(user.email, match);
+              if (result.success) break;
+            }
+          }
+
           await logNotification(
             user.userId,
             match.id,
