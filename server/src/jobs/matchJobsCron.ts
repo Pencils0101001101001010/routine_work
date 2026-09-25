@@ -30,6 +30,9 @@ function groupByTitleAndLocation(
 export async function runMatchJob(): Promise<void> {
   const preferences = await getActivePreferences();
   const groupedSearches = groupByTitleAndLocation(preferences);
+  console.log(
+    `Found ${preferences.length} active preferences, ${groupedSearches.length} unique searches`,
+  );
   const MAX_RETRIES = 2;
 
   console.log("-------------Starting Cron Job----------------");
@@ -38,6 +41,9 @@ export async function runMatchJob(): Promise<void> {
     let jobs;
     try {
       jobs = await searchJobs(search.jobTitle, search.location);
+      console.log(
+        `"${search.jobTitle}" in "${search.location}": Adzuna returned ${jobs.length} jobs`,
+      );
     } catch (err) {
       console.error(
         `Skipping search "${search.jobTitle}" in "${search.location}" — Adzuna fetch failed:`,
@@ -49,6 +55,9 @@ export async function runMatchJob(): Promise<void> {
     for (const user of search.users) {
       try {
         const newMatches = await findNewMatches(user.preferenceId, jobs);
+        console.log(
+          `${newMatches.length} new matches for ${user.email} on "${search.jobTitle}"`,
+        );
 
         for (const match of newMatches) {
           let result = await sendMatchNotification(user.email, match);
