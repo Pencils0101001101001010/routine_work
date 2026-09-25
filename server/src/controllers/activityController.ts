@@ -28,7 +28,9 @@ export const getSentJobs: RequestHandler = async (req, res, next) => {
 
 export const getJobsSentCount: RequestHandler = async (req, res, next) => {
   try {
-    const result = await pool.query("SELECT COUNT(*) FROM NOTIFICATION_LOG");
+    const result = await pool.query(
+      "SELECT COUNT(*) FROM NOTIFICATION_LOG WHERE status = 'sent'",
+    );
 
     const currentCount = parseInt(result.rows[0].count, 10);
 
