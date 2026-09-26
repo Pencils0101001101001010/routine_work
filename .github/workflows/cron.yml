@@ -4,7 +4,7 @@ name: Trigger Daily Job Match Cron
 
 on:
   schedule:
-    - cron: "45 10 * * *"
+    - cron: "30 11 * * *"
   workflow_dispatch:
 
 jobs:
