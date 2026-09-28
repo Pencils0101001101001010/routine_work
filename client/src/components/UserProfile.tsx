@@ -28,6 +28,7 @@ export default function UserProfile() {
     }
   };
 
+  //I will improve this shortly.
   return (
     <section className="h-screen ">
       <AuthButton onClick={handleDelete}>Delete Profile</AuthButton>
