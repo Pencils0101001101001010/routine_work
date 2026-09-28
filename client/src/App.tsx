@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import Preferences from "./components/Preferences";
 import UserJobHistory from "./components/UserJobHistory";
 import Footer from "./components/Footer";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   return (
@@ -41,6 +42,10 @@ function AppRoutes() {
       <Route
         path="/history"
         element={user ? <UserJobHistory /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/user-profile"
+        element={user ? <UserProfile /> : <Navigate to="/login" replace />}
       />
       <Route path="/" element={<LandingPage />} />
     </Routes>
