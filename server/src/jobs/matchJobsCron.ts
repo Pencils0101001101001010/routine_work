@@ -77,8 +77,8 @@ export async function runMatchJob(): Promise<void> {
             match.id,
             match.title,
             match.company,
-            match.sourceUrl,
             result.success ? "sent" : "failed",
+            match.sourceUrl,
           );
         }
         console.log("-------------Finished with cron job-------------------");
