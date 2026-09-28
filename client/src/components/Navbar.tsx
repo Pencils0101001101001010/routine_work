@@ -13,11 +13,14 @@ export default function Navbar() {
           alt="Routine Work logo"
           className="w-8 h-8 rounded-full"
         />
-        <p className="pl-2 font-extrabold">Routine Works</p>
       </Link>
 
       {user ? (
         <menu className="flex  items-center gap-2 ">
+          <Link to={"/history"} className="hover:text-green-400">
+            History
+          </Link>
+          |
           <Link to={"/preferences"} className="hover:text-green-400">
             Preferences
           </Link>

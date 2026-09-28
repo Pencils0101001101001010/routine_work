@@ -23,4 +23,5 @@ export interface NotificationLog {
   sent_at?: string;
   job_title?: string;
   company?: string;
+  source_url?: string;
 }

@@ -67,6 +67,8 @@ export async function sendMatchNotification(
   }
 }
 
+//& Node mailer code
+
 // import { transporter } from "../config/transporter.js";
 // import type { JobMatch } from "../types/index.js";
 

@@ -102,7 +102,7 @@ export default function Preferences() {
   }, []);
 
   return (
-    <div className="h-screen">
+    <div className="h-full">
       <form onSubmit={handleSubmit} className="mb-5">
         <span className="flex flex-col md:flex-row items-center justify-center mb-5 gap-5">
           <InputFields
@@ -127,7 +127,7 @@ export default function Preferences() {
       <h1 className="text-center text-2xl font-extrabold my-4">
         Set preferences
       </h1>
-      <section className="flex justify-center items-center">
+      <section className="flex justify-center items-center mb-4">
         <table className=" min-w-3/4">
           <thead>
             <tr>
@@ -138,7 +138,11 @@ export default function Preferences() {
           </thead>
           <tbody>
             {jobPreference.length <= 0 ? (
-              "No Preferences set"
+              <tr>
+                <td colSpan={3} className="text-center px-8 py-4">
+                  No Preferences set
+                </td>
+              </tr>
             ) : (
               <>
                 {jobPreference.map((j) => (
@@ -151,9 +155,9 @@ export default function Preferences() {
                     </td>
                     <td className="px-8 py-4 border-2 border-green-800 ">
                       <AuthButton
-                        isSubmitting={isLoading}
                         type="button"
                         onClick={() => onDelete(j.id)}
+                        disabled={isLoading}
                       >
                         Delete
                       </AuthButton>

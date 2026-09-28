@@ -7,15 +7,18 @@ import LandingPage from "./components/LandingPage";
 import { useAuth } from "../context/auth-context";
 import Navbar from "./components/Navbar";
 import Preferences from "./components/Preferences";
+import UserJobHistory from "./components/UserJobHistory";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <div className="text-green-50">
       <BrowserRouter>
         <AuthProvider>
-          <Toaster position="top-right" />
+          <Toaster position="top-center" />
           <Navbar />
           <AppRoutes />
+          <Footer />
         </AuthProvider>
       </BrowserRouter>
     </div>
@@ -25,7 +28,7 @@ function App() {
 function AppRoutes() {
   const { user, loading } = useAuth();
 
-  if (loading) return <div>Loading…</div>;
+  if (loading) return <div className="h-screen">Loading…</div>;
 
   return (
     <Routes>
@@ -34,6 +37,10 @@ function AppRoutes() {
       <Route
         path="/preferences"
         element={user ? <Preferences /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/history"
+        element={user ? <UserJobHistory /> : <Navigate to="/login" replace />}
       />
       <Route path="/" element={<LandingPage />} />
     </Routes>

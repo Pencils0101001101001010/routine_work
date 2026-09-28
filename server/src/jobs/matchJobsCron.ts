@@ -55,6 +55,9 @@ export async function runMatchJob(): Promise<void> {
     for (const user of search.users) {
       try {
         const newMatches = await findNewMatches(user.preferenceId, jobs);
+
+        //^ Add a second mail for jobs not found to let users know to change their preference
+
         console.log(
           `${newMatches.length} new matches for ${user.email} on "${search.jobTitle}"`,
         );
@@ -90,8 +93,3 @@ export async function runMatchJob(): Promise<void> {
     }
   }
 }
-
-// export function startMatchJobsCron() {
-//   cron.schedule("0 8 * * *", runMatchJob);
-// } //"0 8 * * *" runs daily at 8am
-//*/40 * * * * * this is every 40 sec
