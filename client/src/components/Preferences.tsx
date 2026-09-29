@@ -160,7 +160,7 @@ export default function Preferences() {
               jobPreference.map((j) => (
                 <div
                   key={j.id}
-                  className="border-2 w-87.5 h-45 border-green-800 rounded-md p-4 flex flex-col gap-2"
+                  className="border-2 w-87.5 h-40 border-green-800 rounded-2xl hover:shadow-2xl p-4 flex flex-col gap-2"
                 >
                   <span className="font-bold text-lg">{j.job_title}</span>
                   <div className="flex justify-between text-sm text-green-100/80 mb-5">
