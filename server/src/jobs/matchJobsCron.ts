@@ -16,7 +16,12 @@ function groupByTitleAndLocation(
   for (const p of prefs) {
     const key = `${p.jobTitle.toLowerCase()}|${p.location.toLowerCase()}`;
     if (!map.has(key))
-      map.set(key, { jobTitle: p.jobTitle, location: p.location, users: [] });
+      map.set(key, {
+        jobTitle: p.jobTitle,
+        location: p.location,
+        distance: p.distance,
+        users: [],
+      });
     map.get(key)!.users.push({
       userId: p.userId,
       email: p.email,
@@ -41,9 +46,13 @@ export async function runMatchJob(): Promise<void> {
   for (const search of groupedSearches) {
     let jobs;
     try {
-      jobs = await searchJobsWithRetry(search.jobTitle, search.location);
+      jobs = await searchJobsWithRetry(
+        search.jobTitle,
+        search.location,
+        search.distance,
+      );
       console.log(
-        `"${search.jobTitle}" in "${search.location}": Adzuna returned ${jobs.length} jobs`,
+        `"${search.jobTitle}" in "${search.location}": Adzuna returned ${jobs.length} jobs, within ${search.distance} from location`,
       );
     } catch (err) {
       console.error(

@@ -13,6 +13,7 @@ export interface JobPreference {
   userId: string;
   jobTitle: string;
   location: string;
+  distance: number;
   active: boolean;
   lastCheckedAt: Date | null;
 }
@@ -32,6 +33,7 @@ export interface UserPreference extends JobPreference {
 export interface GroupedSearch {
   jobTitle: string;
   location: string;
+  distance: number;
   users: {
     userId: string;
     whatsappNumber: string;

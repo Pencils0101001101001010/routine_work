@@ -13,6 +13,7 @@ export interface JobPreference {
   user_id?: string;
   job_title: string;
   location: string;
+  distance: number;
 }
 
 export interface NotificationLog {

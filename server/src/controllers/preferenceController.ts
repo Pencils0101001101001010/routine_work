@@ -5,10 +5,10 @@ import type { JobPreference } from "../types/index.js";
 const MAX_PREFERENCES = 5;
 
 export const addPreferences: RequestHandler = async (req, res, next) => {
-  const { job_title, location, active } = req.body;
+  const { job_title, location, distance, active } = req.body;
   const userId = req.userId;
 
-  if (!job_title || !location) {
+  if (!job_title || !location || !distance) {
     return res.status(400).json({ error: "All fields are required." });
   }
 
@@ -27,8 +27,8 @@ export const addPreferences: RequestHandler = async (req, res, next) => {
     }
 
     const result = await pool.query<JobPreference>(
-      "INSERT INTO JOB_PREFERENCES (user_id, job_title, location, active) VALUES ($1, $2, $3, $4) RETURNING * ",
-      [userId, job_title, location, active ?? true],
+      "INSERT INTO JOB_PREFERENCES (user_id, job_title, location, distance, active) VALUES ($1, $2, $3, $4, $5) RETURNING * ",
+      [userId, job_title, location, distance, active ?? true],
     );
 
     return res.status(201).json(result.rows[0]);
@@ -63,7 +63,7 @@ export const getPreferences: RequestHandler = async (req, res, next) => {
 export const updatePreferences: RequestHandler = async (req, res, next) => {
   const { id } = req.params; //Preference id
   const userId = req.userId;
-  const { job_title, location, active } = req.body;
+  const { job_title, location, distance, active } = req.body;
 
   if (!userId) {
     return res.status(400).json({ error: "Not authenticated." });
@@ -71,8 +71,8 @@ export const updatePreferences: RequestHandler = async (req, res, next) => {
 
   try {
     const result = await pool.query(
-      "UPDATE JOB_PREFERENCES SET job_title = COALESCE($1, job_title), location = COALESCE($2, location), active = COALESCE($3, active) WHERE user_id = $4 AND id = $5 RETURNING *",
-      [job_title, location, active, userId, id],
+      "UPDATE JOB_PREFERENCES SET job_title = COALESCE($1, job_title), location = COALESCE($2, location), distance = COALESCE($3, distance), active = COALESCE($4, active) WHERE user_id = $5 AND id = $6 RETURNING *",
+      [job_title, location, distance, active, userId, id],
     );
 
     if (result.rows.length === 0) {
