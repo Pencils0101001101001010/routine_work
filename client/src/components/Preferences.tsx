@@ -151,50 +151,80 @@ export default function Preferences() {
         Set preferences
       </h1>
       <section className="flex justify-center items-center mb-4">
-        <table className=" min-w-3/4">
-          <thead>
-            <tr>
-              <TableHead title="Job Title" />
-              <TableHead title="Location" />
-              <TableHead title="Distance (km) " />
-              <TableHead title="Action" />
-            </tr>
-          </thead>
-          <tbody>
+        <section className="mb-4">
+          {/* Mobile: card list */}
+          <div className="flex flex-col gap-3 md:hidden">
             {jobPreference.length <= 0 ? (
-              <tr>
-                <td colSpan={3} className="text-center px-8 py-4">
-                  No Preferences set
-                </td>
-              </tr>
+              <p className="text-center px-4 py-6">No Preferences set</p>
             ) : (
-              <>
-                {jobPreference.map((j) => (
-                  <tr key={j.id} className="  ">
-                    <td className="px-8 py-4 border-2 border-green-800 ">
-                      {j.job_title}
-                    </td>
-                    <td className="px-8 py-4 border-2 border-green-800 ">
-                      {j.location}
-                    </td>
-                    <td className="px-8 py-4 border-2 border-green-800 ">
-                      {j.distance} km
-                    </td>
-                    <td className="px-8 py-4 border-2 border-green-800 ">
-                      <AuthButton
-                        type="button"
-                        onClick={() => onDelete(j.id)}
-                        disabled={isLoading}
-                      >
-                        Delete
-                      </AuthButton>
+              jobPreference.map((j) => (
+                <div
+                  key={j.id}
+                  className="border-2 border-green-800 rounded-md p-4 flex flex-col gap-2"
+                >
+                  <span className="font-bold text-lg">{j.job_title}</span>
+                  <div className="flex justify-between text-sm text-green-100/80">
+                    <span>{j.location}</span>
+                    <span>{j.distance} km</span>
+                  </div>
+                  <AuthButton
+                    type="button"
+                    onClick={() => onDelete(j.id)}
+                    disabled={isLoading}
+                  >
+                    Delete
+                  </AuthButton>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Desktop/tablet: table */}
+          <div className="hidden md:flex justify-center items-center">
+            <table className="min-w-3/4">
+              <thead>
+                <tr>
+                  <TableHead title="Job Title" />
+                  <TableHead title="Location" />
+                  <TableHead title="Distance (km)" />
+                  <TableHead title="Action" />
+                </tr>
+              </thead>
+              <tbody>
+                {jobPreference.length <= 0 ? (
+                  <tr>
+                    <td colSpan={4} className="text-center px-8 py-4">
+                      No Preferences set
                     </td>
                   </tr>
-                ))}
-              </>
-            )}
-          </tbody>
-        </table>
+                ) : (
+                  jobPreference.map((j) => (
+                    <tr key={j.id}>
+                      <td className="px-8 py-4 border-2 border-green-800">
+                        {j.job_title}
+                      </td>
+                      <td className="px-8 py-4 border-2 border-green-800">
+                        {j.location}
+                      </td>
+                      <td className="px-8 py-4 border-2 border-green-800">
+                        {j.distance} km
+                      </td>
+                      <td className="px-8 py-4 border-2 border-green-800">
+                        <AuthButton
+                          type="button"
+                          onClick={() => onDelete(j.id)}
+                          disabled={isLoading}
+                        >
+                          Delete
+                        </AuthButton>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </section>
     </div>
   );
