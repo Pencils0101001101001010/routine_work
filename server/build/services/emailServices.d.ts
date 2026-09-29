@@ -3,7 +3,6 @@ export declare function sendMatchNotification(email: string, match: JobMatch): P
     success: boolean;
     reason?: string;
     error?: unknown;
-    details?: unknown;
     providerId?: string;
 }>;
 //# sourceMappingURL=emailServices.d.ts.map

@@ -6,13 +6,25 @@ export async function searchJobs(title, location) {
     url.searchParams.set("app_key", appKey);
     url.searchParams.set("what", title);
     url.searchParams.set("where", location);
-    //   console.log(url.toString());
-    // this is what the url will look like
-    //   https://api.adzuna.com/v1/api/jobs/za/search/1?app_id=*******&app_key=********&what=Art+Teacher&where=Brackenfell%2C+Protea+Hights
     const res = await fetch(url.toString());
-    if (!res.ok)
-        throw new Error(`Adzuna request fail: ${res.status}`);
+    if (!res.ok) {
+        throw new Error(`Adzuna request fail: ${res.status} ${res.statusText}`);
+    }
     const data = await res.json();
     return data.results;
+}
+// Retry error 503
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+export async function searchJobsWithRetry(title, location, retries = 2) {
+    try {
+        return await searchJobs(title, location);
+    }
+    catch (err) {
+        if (retries > 0) {
+            await sleep(1000);
+            return searchJobsWithRetry(title, location, retries - 1);
+        }
+        throw err;
+    }
 }
 //# sourceMappingURL=adzunaService.js.map

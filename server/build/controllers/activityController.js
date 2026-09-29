@@ -4,13 +4,19 @@ export const getSentJobs = async (req, res, next) => {
     if (!userId) {
         return res.status(401).json({ error: "Not authorized." });
     }
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 9;
+    const offset = (page - 1) * limit;
     try {
-        const result = await pool.query("SELECT * FROM NOTIFICATION_LOG WHERE user_id = $1", [userId]);
-        const userMatchingJobs = result.rows;
-        if (userMatchingJobs.length === 0) {
-            return res.status(404).json({ error: "No Jobs sent yet" });
-        }
-        res.status(200).json(userMatchingJobs);
+        const result = await pool.query("SELECT * FROM NOTIFICATION_LOG WHERE user_id = $1 ORDER BY sent_at DESC LIMIT $2 OFFSET $3", [userId, limit, offset]);
+        const countResult = await pool.query("SELECT COUNT(*) FROM NOTIFICATION_LOG WHERE user_id = $1", [userId]);
+        const total = parseInt(countResult.rows[0].count);
+        return res.status(200).json({
+            data: result.rows,
+            total,
+            page,
+            totalPages: Math.max(1, Math.ceil(total / limit)),
+        });
     }
     catch (error) {
         next(error);
@@ -18,7 +24,7 @@ export const getSentJobs = async (req, res, next) => {
 };
 export const getJobsSentCount = async (req, res, next) => {
     try {
-        const result = await pool.query("SELECT COUNT(*) FROM NOTIFICATION_LOG");
+        const result = await pool.query("SELECT COUNT(*) FROM NOTIFICATION_LOG WHERE status = 'sent'");
         const currentCount = parseInt(result.rows[0].count, 10);
         return res.status(200).json(currentCount);
     }

@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import { getActivePreferences, markChecked, } from "../models/preferenceModal.js";
-import { searchJobs } from "../services/adzunaService.js";
+import { searchJobs, searchJobsWithRetry } from "../services/adzunaService.js";
 import { findNewMatches } from "../services/matchingService.js";
 import { sendMatchNotification } from "../services/emailServices.js";
 import { logNotification } from "../models/notificationModel.js";
@@ -22,21 +22,51 @@ function groupByTitleAndLocation(prefs) {
 export async function runMatchJob() {
     const preferences = await getActivePreferences();
     const groupedSearches = groupByTitleAndLocation(preferences);
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    console.log(`Found ${preferences.length} active preferences, ${groupedSearches.length} unique searches`);
+    const MAX_RETRIES = 2;
+    console.log("-------------Starting Cron Job----------------");
     for (const search of groupedSearches) {
-        const jobs = await searchJobs(search.jobTitle, search.location);
+        let jobs;
+        try {
+            jobs = await searchJobsWithRetry(search.jobTitle, search.location);
+            console.log(`"${search.jobTitle}" in "${search.location}": Adzuna returned ${jobs.length} jobs`);
+        }
+        catch (err) {
+            console.error(`Skipping search "${search.jobTitle}" in "${search.location}" — Adzuna fetch failed:`, err);
+            continue; // move to the next search, don't mark these preferences checked
+        }
+        finally {
+            await sleep(1500); // Set delay to try and lighten to amount of hit adzuna gets a once
+        }
         for (const user of search.users) {
-            const newMatches = await findNewMatches(user.preferenceId, jobs);
-            for (const match of newMatches) {
-                const result = await sendMatchNotification(user.email, match);
-                // console.log(`Email sent to ${user.email}`);
-                await logNotification(user.userId, match.id, match.title, match.company, result.success ? "sent" : "failed");
+            try {
+                const newMatches = await findNewMatches(user.preferenceId, jobs);
+                //^ Add a second mail for jobs not found to let users know to change their preference
+                console.log(`${newMatches.length} new matches for ${user.email} on "${search.jobTitle}"`);
+                for (const match of newMatches) {
+                    let result = await sendMatchNotification(user.email, match);
+                    for (let i = 0; i < MAX_RETRIES; i++) {
+                        //retry failed mails
+                        if (!result.success) {
+                            console.warn(`Retry ${i + 1} for ${user.email} (${match.title})`);
+                            await new Promise((resolve) => setTimeout(resolve, 1500));
+                            result = await sendMatchNotification(user.email, match);
+                            if (result.success)
+                                break;
+                        }
+                    }
+                    await logNotification(user.userId, match.id, match.title, match.company, result.success ? "sent" : "failed", match.sourceUrl);
+                }
+                console.log("-------------Finished with cron job-------------------");
             }
-            await markChecked(user.preferenceId);
+            catch (err) {
+                console.error(`Error processing preference ${user.preferenceId}:`, err);
+            }
+            finally {
+                await markChecked(user.preferenceId);
+            }
         }
     }
 }
-export function startMatchJobsCron() {
-    cron.schedule("0 8 * * *", runMatchJob);
-} //"0 8 * * *" runs daily at 8am
-//*/40 * * * * * this is every 40 sec
 //# sourceMappingURL=matchJobsCron.js.map

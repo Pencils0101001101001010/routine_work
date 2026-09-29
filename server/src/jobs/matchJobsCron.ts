@@ -4,7 +4,7 @@ import {
   getActivePreferences,
   markChecked,
 } from "../models/preferenceModal.js";
-import { searchJobs } from "../services/adzunaService.js";
+import { searchJobs, searchJobsWithRetry } from "../services/adzunaService.js";
 import { findNewMatches } from "../services/matchingService.js";
 import { sendMatchNotification } from "../services/emailServices.js";
 import { logNotification } from "../models/notificationModel.js";
@@ -30,6 +30,7 @@ function groupByTitleAndLocation(
 export async function runMatchJob(): Promise<void> {
   const preferences = await getActivePreferences();
   const groupedSearches = groupByTitleAndLocation(preferences);
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
   console.log(
     `Found ${preferences.length} active preferences, ${groupedSearches.length} unique searches`,
   );
@@ -40,7 +41,7 @@ export async function runMatchJob(): Promise<void> {
   for (const search of groupedSearches) {
     let jobs;
     try {
-      jobs = await searchJobs(search.jobTitle, search.location);
+      jobs = await searchJobsWithRetry(search.jobTitle, search.location);
       console.log(
         `"${search.jobTitle}" in "${search.location}": Adzuna returned ${jobs.length} jobs`,
       );
@@ -50,6 +51,8 @@ export async function runMatchJob(): Promise<void> {
         err,
       );
       continue; // move to the next search, don't mark these preferences checked
+    } finally {
+      await sleep(1500); // Set delay to try and lighten to amount of hit adzuna gets a once
     }
 
     for (const user of search.users) {
