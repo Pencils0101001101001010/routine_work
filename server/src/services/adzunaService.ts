@@ -15,11 +15,11 @@ export async function searchJobs(
   url.searchParams.set("where", location);
   url.searchParams.set("distance", String(distance));
 
-  console.log(url.toString());
+  // console.log(url.toString());
   // this is what the url will look like
   //   https://api.adzuna.com/v1/api/jobs/za/search/1?app_id=*******&app_key=********&what=Art+Teacher&where=Brackenfell%2C+Protea+Hights
 
-  //^This is what I am aiming for to alow users to search more than on title and set distance where the center is the postal code they set
+  //^This is what I am aiming for to alow users to search more than one title and set distance where the center is the postal code they set
   //https://api.adzuna.com/v1/api/jobs/za/search/1?app_id=d6df9319&app_key=0da848e3c80b69471cda603776a1b32a&what=full%20stack%20developer&what_and=nodejs%20developer&where=8001&distance=100
 
   const res = await fetch(url.toString());
