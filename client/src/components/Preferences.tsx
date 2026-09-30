@@ -134,7 +134,7 @@ export default function Preferences() {
               name="distance"
               value={formData.distance}
               onChange={handleChange}
-              className="rounded-md border-2 border-green-800 bg-green-950 mb-2 px-3 py-2 text-white focus:border-green-400 focus:outline-hidden focus:ring-2 focus:ring-green-400/40 focus:zoom-110 focus:shadow-2xl focus:mb-4 " // match your other inputs' styling
+              className="rounded-2xl shadow-2xl border-l border-r border-green-400 bg-green-950 mb-2 px-3 py-2 text-white focus:border-green-400 focus:outline-hidden focus:ring-2 focus:ring-green-400/40 focus:zoom-110 focus:shadow-2xl focus:mb-4 " // match your other inputs' styling
             >
               <option value={10}>10km</option>
               <option value={20}>20km</option>
@@ -160,7 +160,7 @@ export default function Preferences() {
               jobPreference.map((j) => (
                 <div
                   key={j.id}
-                  className="border-2 w-87.5 h-40 border-green-800 rounded-2xl hover:shadow-2xl p-4 flex flex-col gap-2"
+                  className="  w-87.5 h-40 rounded-2xl shadow-2xl border-l border-r border-green-400 hover:shadow-2xl p-4 flex flex-col gap-2"
                 >
                   <span className="font-bold text-lg">{j.job_title}</span>
                   <div className="flex justify-between text-sm text-green-100/80 mb-5">

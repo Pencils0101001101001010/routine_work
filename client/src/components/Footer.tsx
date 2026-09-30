@@ -5,8 +5,8 @@ export default function Footer() {
 
   const year = d.getFullYear();
   return (
-    <footer className="flex flex-col h-full w-full p-4 mb-5 md:mb-0 bg-[#011e17] ">
-      <p className="flex w-full items-center justify-center mb-8 p-2 text-center border-b-2">
+    <footer className="flex flex-col h-full w-full p-4 mb-1 md:mb-0 bg-[#011e17] ">
+      <p className="flex w-full items-center justify-center mb-8 p-2 text-center rounded-2xl shadow-2xl border-b border-green-400">
         At Routine Works we focus on installing a healthy routine of applying
         for available positions everyday.
       </p>

@@ -26,14 +26,14 @@ export default function UserJobHistory() {
           {isLoading && <p>Loading history...</p>}
           {isError && <p>Failed to load logs.</p>}
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
             {notificationLog.map((h) => {
               const normalizedDate = h.sent_at?.split("T")[0];
               const isSent = h.status === "sent";
               return (
                 <div
                   key={h.id}
-                  className={`border w-87.5 h-45 rounded-2xl p-4 flex flex-col justify-between hover:shadow-2xl ${
+                  className={`rounded-2xl shadow-2xl border-l border-r border-green-400 w-87.5 h-45  p-4 flex flex-col justify-between hover:shadow-2xl ${
                     isSent
                       ? "border-green-300/50 hover:border-green-300 hover:bg-green-400/10"
                       : "border-red-300/50 hover:border-red-300 hover:bg-red-400/10"

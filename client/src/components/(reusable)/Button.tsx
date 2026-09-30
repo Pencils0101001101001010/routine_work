@@ -17,7 +17,7 @@ export default function AuthButton({
       className={
         isSubmitting
           ? "rounded-md border-2 border-green-80/70 bg-green-950/70  px-3 py-2 text-white "
-          : "rounded-md border-2 border-green-800 bg-green-950  px-3 py-2 text-white hover:border-green-400 hover:ring-green-400/40 hover:shadow-2xl"
+          : "rounded-2xl shadow-2xl border-t border-b border-green-400 bg-green-950  px-3 py-2 text-white hover:border-green-200 hover:ring-green-400/40 hover:shadow-2xl"
       }
       {...props}
     >
