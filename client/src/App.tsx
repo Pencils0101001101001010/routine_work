@@ -13,7 +13,7 @@ import UserProfile from "./components/UserProfile";
 
 function App() {
   return (
-    <div className="text-green-50">
+    <div className="text-green-50 font-mono">
       <BrowserRouter>
         <AuthProvider>
           <Toaster position="top-center" />

@@ -83,7 +83,7 @@ export default function UserJobHistory() {
             })}
           </div>
 
-          <div className="flex justify-center items-center gap-4 mt-2 mb-4">
+          <div className="flex justify-center items-center gap-4 mt-2 mb-8">
             <AuthButton
               type="button"
               disabled={page <= 1}

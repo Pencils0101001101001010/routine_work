@@ -15,7 +15,7 @@ export default function InfoTiles({
 }: InfoProps) {
   return (
     <div className="flex md:flex-row items-center justify-center relative">
-      <span className="w-50 h-56 mx-4 my-3 rounded-md border-2 border-green-50 bg-green-950  px-3 py-2 text-white hover:border-green-400 hover:ring-green-400/40 hover:shadow-2xl">
+      <span className="w-55 h-62 mx-4 my-3 rounded-md border-2 border-green-50 bg-green-950  px-3 py-2 text-white hover:border-green-400 hover:ring-green-400/40 hover:shadow-2xl">
         <h1 className="text-1xl md:text-2xl text-green-300 my-2 font-bold">
           {title}
         </h1>

@@ -122,7 +122,7 @@ export default function Preferences() {
             onChange={handleChange}
             value={formData.location}
             inputLabel="Location"
-            placeholder="Enter area postal code: 8001"
+            placeholder="Postal code e.g 8001"
           />
 
           <div

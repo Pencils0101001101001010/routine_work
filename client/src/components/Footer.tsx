@@ -5,8 +5,8 @@ export default function Footer() {
 
   const year = d.getFullYear();
   return (
-    <footer className="flex flex-col h-full w-full p-4 bg-[#011e17] ">
-      <p className="flex w-full items-center justify-center mb-5 p-2 text-center border-b-2">
+    <footer className="flex flex-col h-full w-full p-4 mb-5 md:mb-0 bg-[#011e17] ">
+      <p className="flex w-full items-center justify-center mb-8 p-2 text-center border-b-2">
         At Routine Works we focus on installing a healthy routine of applying
         for available positions everyday.
       </p>
@@ -14,7 +14,7 @@ export default function Footer() {
         <ul>
           <ListItem title="We find available vacancies and send it to you" />
           <ListItem
-            title="All job listings provided by"
+            title="Jobs By"
             linkUrl="http://www.adzuna.co.za"
             imgLink="https://zunastatic-abf.kxcdn.com/assets/images/press/adzuna_logo/adzuna_logo.jpg"
             altTitle="Adzuna logo"

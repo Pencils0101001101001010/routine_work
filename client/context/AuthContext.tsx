@@ -40,6 +40,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(res.data.user);
   };
 
+  const updateUser = (
+    fields: Partial<User> | ((prev: User | null) => User | null),
+  ) => {
+    setUser((prevUser) => {
+      if (typeof fields === "function") {
+        return fields(prevUser);
+      }
+      return prevUser ? { ...prevUser, ...fields } : null;
+    });
+  };
+
   const logout = async () => {
     try {
       await api.post("/user/logout");
@@ -49,7 +60,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, register, logout, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

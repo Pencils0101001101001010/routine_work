@@ -12,6 +12,9 @@ export interface AuthContextValue {
     password: string,
   ) => Promise<void>;
   logout: () => Promise<void>;
+  updateUser: (
+    fields: Partial<User> | ((prev: User | null) => User | null),
+  ) => void;
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
