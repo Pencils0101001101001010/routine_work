@@ -19,7 +19,7 @@ export default function ListItem({
         <li className="hover:text-green-400">
           <Link
             to={linkUrl}
-            className="flex flex-col md:flex-row items-center justify-center gap-2"
+            className="flex flex-col md:flex-row items-center justify-center gap-2 py-4"
           >
             <span>{title}</span>
             {imgLink ? (

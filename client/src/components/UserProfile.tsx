@@ -8,11 +8,14 @@ import React, { useEffect, useState, type SubmitEvent } from "react";
 import InputFields from "./(reusable)/InputFields";
 import type { User } from "../../types";
 import UserProfileFields from "./(reusable)/UserProfileFields";
+import PopupModal from "./(reusable)/PopupModal";
+import DeleteConfirmation from "./(reusable)/DeleteConfirmation";
 
 export default function UserProfile() {
   const navigate = useNavigate();
   const { logout, updateUser } = useAuth();
   const [openEditing, setOpenEditing] = useState<boolean>(false);
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -34,8 +37,6 @@ export default function UserProfile() {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Delete your account? This cannot be undone.")) return;
-
     try {
       await toast.promise(api.delete("/user/remove-profile"), {
         loading: "Deleting...",
@@ -97,15 +98,20 @@ export default function UserProfile() {
     }
   };
 
+  const handleConfirmDelete = () => {
+    setConfirmDelete(true);
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmDelete(false);
+  };
+
   useEffect(() => {
     getUser();
   }, []);
 
   return (
-    <section
-      className="flex flex-col h-full
-     justify-center items-center"
-    >
+    <section className=" flex flex-col h-full justify-center relative items-center">
       {openEditing ? (
         <>
           <h1 className="text-2xl">Edit user info</h1>
@@ -173,7 +179,7 @@ export default function UserProfile() {
               Submit
             </AuthButton>
           </form>
-          <div className="my-5">
+          <div className="absolute top-10 right-5">
             <AuthButton onClick={() => setOpenEditing(false)}>
               Cancel
             </AuthButton>
@@ -181,6 +187,12 @@ export default function UserProfile() {
         </>
       ) : (
         <>
+          <PopupModal open={confirmDelete}>
+            <DeleteConfirmation
+              onConfirm={handleDelete}
+              onCancel={handleCancelDelete}
+            />
+          </PopupModal>
           <h1 className="text-2xl">User Profile</h1>
           <div className="md:flex flex-col text-center justify-around w-3xl h-100 hidden px-5 py-5 rounded-2xl shadow-2xl border-l border-r border-green-400 mt-30 mb-30">
             <UserProfileFields label="Name" userData={formData.name} />
@@ -189,7 +201,9 @@ export default function UserProfile() {
               label="Number"
               userData={formData.whatsapp_number}
             />
-            <AuthButton onClick={handleDelete}>Delete Profile</AuthButton>
+            <AuthButton onClick={handleConfirmDelete}>
+              Delete Profile
+            </AuthButton>
           </div>
           <div className="flex flex-col text-center justify-around w-75 h-100 p-5 md:hidden  rounded-2xl shadow-2xl border-l border-r border-green-400 mt-30 mb-30">
             <UserProfileFields label="Name" userData={formData.name} />
@@ -198,9 +212,11 @@ export default function UserProfile() {
               label="Number"
               userData={formData.whatsapp_number}
             />
-            <AuthButton onClick={handleDelete}>Delete Profile</AuthButton>
+            <AuthButton onClick={handleConfirmDelete}>
+              Delete Profile
+            </AuthButton>
           </div>
-          <div className="my-5">
+          <div className="absolute top-10 right-5">
             <AuthButton onClick={handleOpenEditForm}>Edit</AuthButton>
           </div>
         </>

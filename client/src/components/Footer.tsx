@@ -10,9 +10,9 @@ export default function Footer() {
         At Routine Works we focus on installing a healthy routine of applying
         for available positions everyday.
       </p>
-      <div className="text-center columns-1 gap-4 sm:columns-3 sm:gap-8 mb-5">
+      <div className="text-center columns-1 gap-4 sm:columns-3 sm:gap-8 mb-5 ">
         <ul>
-          <ListItem title="We find available vacancies and send it to you" />
+          <ListItem title="We find available vacancies and send it to you." />
           <ListItem
             title="Jobs By"
             linkUrl="http://www.adzuna.co.za"
