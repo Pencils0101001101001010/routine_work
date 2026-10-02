@@ -1,6 +1,6 @@
 interface UserInputFieldProps {
-  label: string;
-  userData: string;
+  label: string | undefined;
+  userData: string | undefined;
 }
 
 export default function UserProfileFields({

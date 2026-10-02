@@ -11,26 +11,29 @@ import UserProfileFields from "./(reusable)/UserProfileFields";
 import PopupModal from "./(reusable)/PopupModal";
 import DeleteConfirmation from "./(reusable)/DeleteConfirmation";
 
+interface ProfileForm {
+  name: string;
+  email: string;
+  whatsapp_number: string;
+}
+
 export default function UserProfile() {
   const navigate = useNavigate();
   const { logout, updateUser } = useAuth();
   const [openEditing, setOpenEditing] = useState<boolean>(false);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-  const [formData, setFormData] = useState({
+  const [draft, setDraft] = useState<ProfileForm>({
     name: "",
     email: "",
     whatsapp_number: "",
   });
+  const [userData, setUserData] = useState<User | null>(null);
 
   const getUser = async () => {
     try {
       const result = await api.get<User>("/user/thats-me");
 
-      setFormData({
-        name: result.data.name,
-        email: result.data.email,
-        whatsapp_number: result.data.whatsapp_number,
-      });
+      setUserData(result.data);
     } catch (error: any) {
       toast.error(error);
     }
@@ -54,13 +57,18 @@ export default function UserProfile() {
   };
 
   const handleOpenEditForm = () => {
+    setDraft({
+      name: userData?.name ?? "",
+      email: userData?.email ?? "",
+      whatsapp_number: userData?.whatsapp_number ?? "",
+    });
     setOpenEditing(true);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setFormData((prevData) => ({
+    setDraft((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -70,11 +78,8 @@ export default function UserProfile() {
     e.preventDefault();
     try {
       await toast.promise(
-        api.patch("/user/update-info", {
-          name: formData.name,
-          email: formData.email,
-          whatsapp_number: formData.whatsapp_number,
-        }),
+        api.patch("/user/update-info", draft),
+
         {
           loading: "Updating...",
           success: "Info updated. ",
@@ -84,17 +89,11 @@ export default function UserProfile() {
           },
         },
       );
-
-      await getUser();
-      updateUser({
-        name: formData.name,
-        email: formData.email,
-        whatsapp_number: formData.whatsapp_number,
-      });
+      setUserData((prev) => (prev ? { ...prev, ...draft } : prev));
+      updateUser(draft);
+      setOpenEditing(false);
     } catch (error: any) {
       //toast handles the error
-    } finally {
-      setOpenEditing(false);
     }
   };
 
@@ -117,68 +116,34 @@ export default function UserProfile() {
           <h1 className="text-2xl">Edit user info</h1>
           <form
             onSubmit={handelSubmit}
-            className="flex flex-col items-center justify-around w-fit p-5 mt-30 mb-30 md:hidden  rounded-2xl shadow-2xl border-l border-r border-green-400"
+            className="flex flex-col items-center w-75 md:w-3xl p-5 rounded-2xl justify-around mt-30 mb-30  shadow-2xl border-l border-r border-green-400"
           >
             <InputFields
               name="name"
               type="text"
-              value={formData.name}
+              value={draft.name}
               onChange={handleChange}
               inputLabel="Name"
-              inputPlaceholder={formData.name}
             />
             <InputFields
               type="email"
               name="email"
-              value={formData.email}
+              value={draft.email}
               onChange={handleChange}
               inputLabel="Email"
-              inputPlaceholder={formData.email}
             />
             <InputFields
               type="tel"
               name="whatsapp_number"
               onChange={handleChange}
               inputLabel="Whatsapp Num"
-              inputPlaceholder={formData.whatsapp_number}
-              value={formData.whatsapp_number}
+              value={draft.whatsapp_number}
             />
             <AuthButton title="Submit" type="submit">
               Submit
             </AuthButton>
           </form>
-          <form
-            onSubmit={handelSubmit}
-            className="md:flex flex-col text-center items-center justify-between w-3xl h-100 hidden px-5 py-5 rounded-2xl shadow-2xl border-l border-r border-green-400 mt-30 mb-30"
-          >
-            <InputFields
-              name="name"
-              type="text"
-              value={formData.name}
-              onChange={handleChange}
-              inputLabel="Name"
-              inputPlaceholder={formData.name}
-            />
-            <InputFields
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              inputLabel="Email"
-              inputPlaceholder={formData.email}
-            />
-            <InputFields
-              type="tel"
-              name="whatsapp_number"
-              onChange={handleChange}
-              inputLabel="Whatsapp Num"
-              inputPlaceholder={formData.whatsapp_number}
-              value={formData.whatsapp_number}
-            />
-            <AuthButton title="Submit" type="submit">
-              Submit
-            </AuthButton>
-          </form>
+
           <div className="absolute top-10 right-5">
             <AuthButton onClick={() => setOpenEditing(false)}>
               Cancel
@@ -194,29 +159,18 @@ export default function UserProfile() {
             />
           </PopupModal>
           <h1 className="text-2xl">User Profile</h1>
-          <div className="md:flex flex-col text-center justify-around w-3xl h-100 hidden px-5 py-5 rounded-2xl shadow-2xl border-l border-r border-green-400 mt-30 mb-30">
-            <UserProfileFields label="Name" userData={formData.name} />
-            <UserProfileFields label="Email" userData={formData.email} />
+          <div className="flex flex-col  w-75 md:w-3xl text-center justify-around  h-100  px-5 py-5 rounded-2xl shadow-2xl border-l border-r border-green-400 mt-30 mb-30">
+            <UserProfileFields label="Name" userData={userData?.name} />
+            <UserProfileFields label="Email" userData={userData?.email} />
             <UserProfileFields
               label="Number"
-              userData={formData.whatsapp_number}
+              userData={userData?.whatsapp_number}
             />
             <AuthButton onClick={handleConfirmDelete}>
               Delete Profile
             </AuthButton>
           </div>
-          <div className="flex flex-col text-center justify-around w-75 h-100 p-5 md:hidden  rounded-2xl shadow-2xl border-l border-r border-green-400 mt-30 mb-30">
-            <UserProfileFields label="Name" userData={formData.name} />
-            <UserProfileFields label="Email" userData={formData.email} />
-            <UserProfileFields
-              label="Number"
-              userData={formData.whatsapp_number}
-            />
-            <AuthButton onClick={handleConfirmDelete}>
-              Delete Profile
-            </AuthButton>
-          </div>
-          <div className="absolute top-10 right-5">
+          <div className="absolute top-10 right-10">
             <AuthButton onClick={handleOpenEditForm}>Edit</AuthButton>
           </div>
         </>
