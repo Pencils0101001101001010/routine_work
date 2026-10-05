@@ -17,6 +17,7 @@ interface ProfileForm {
   whatsapp_number: string;
 }
 
+//Will improve this page asap
 export default function UserProfile() {
   const navigate = useNavigate();
   const { logout, updateUser } = useAuth();
