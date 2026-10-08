@@ -7,9 +7,11 @@ import { toast } from "react-hot-toast";
 import type { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/maskable-icon-512x512.png";
+import { parseApiError } from "../../utils/apiError";
 
 export default function RegisterPage() {
   const [isRegistering, setIsRegistering] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
   const [formData, setFormData] = useState<User>({
     name: "",
     email: "",
@@ -31,26 +33,25 @@ export default function RegisterPage() {
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsRegistering(true);
+    setFieldErrors({});
+    const toastId = toast.loading("Registering");
+
     try {
-      await toast.promise(
-        register(
-          formData.name,
-          formData.email,
-          formData.whatsapp_number,
-          formData.password,
-        ),
-        {
-          loading: "Registering",
-          success: "Account Created",
-          error: (err: unknown) => {
-            const axiosErr = err as AxiosError<{ error: string }>;
-            return axiosErr.response?.data?.error || "Registration failed.";
-          },
-        },
+      await register(
+        formData.name,
+        formData.email,
+        formData.whatsapp_number,
+        formData.password,
       );
+      toast.success("Account Created", { id: toastId });
       navigate("/login");
-    } catch (error) {
-      //toast already handles the error
+    } catch (err) {
+      const { message, fieldErrors } = parseApiError(
+        err,
+        "Registration failed.",
+      );
+      setFieldErrors(fieldErrors);
+      toast.error(message, { id: toastId });
     } finally {
       setIsRegistering(false);
     }
@@ -75,6 +76,7 @@ export default function RegisterPage() {
         inputPlaceholder="name"
         onChange={handleChange}
         value={formData.name}
+        error={fieldErrors.name?.[0]}
         required
       />
       <InputFields
@@ -84,6 +86,7 @@ export default function RegisterPage() {
         inputPlaceholder="myEmail@gmail.com"
         onChange={handleChange}
         value={formData.email}
+        error={fieldErrors.email?.[0]}
         required
       />
       <InputFields
@@ -92,6 +95,7 @@ export default function RegisterPage() {
         inputLabel="Phone Number"
         onChange={handleChange}
         value={formData.whatsapp_number}
+        error={fieldErrors.whatsapp_number?.[0]}
         required
       />
       <InputFields
@@ -100,6 +104,7 @@ export default function RegisterPage() {
         inputLabel="Password"
         onChange={handleChange}
         value={formData.password}
+        error={fieldErrors.password?.[0]}
         required
       />
 

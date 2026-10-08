@@ -16,11 +16,10 @@ const allowedOrigins = (
   .split(",")
   .map((o) => o.trim());
 
+app.use(helmet());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
-
-app.use(helmet());
 
 app.use("/api/active", activeLogs);
 app.use("/api/user", authRoutes);

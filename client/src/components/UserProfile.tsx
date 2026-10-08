@@ -18,6 +18,7 @@ interface ProfileForm {
 }
 
 //Will improve this page asap
+//* Include a conditional check for the edit for to make sure no api request gets sent when the data is the shame
 export default function UserProfile() {
   const navigate = useNavigate();
   const { logout, updateUser } = useAuth();
@@ -77,6 +78,7 @@ export default function UserProfile() {
 
   const handelSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
       await toast.promise(
         api.patch("/user/update-info", draft),

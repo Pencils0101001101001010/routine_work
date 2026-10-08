@@ -1,13 +1,47 @@
 import "../config/loadEnv.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import pool from "../db/db.js";
+import pool, { transaction } from "../db/db.js";
 import { JWT_SECRET } from "../config/env.js";
 import type { RequestHandler } from "express";
 import type { Users } from "../types/index.js";
 import { COOKIE_NAME, cookieOptions } from "../config/cookie.js";
+import { HttpError } from "../util/errors.js";
+import { digest, randomToken } from "../util/crypto.js";
+import { randomUUID } from "node:crypto";
+import { sendTokenEmail } from "../services/mail.service.js";
 
 const SALT_ROUNDS = 12;
+
+async function emailToken(user: Users, purpose: "verify" | "reset") {
+  const token = randomToken();
+  await transaction(async (db) => {
+    await db.query(
+      "UPDATE auth_tokens SET used_at=now() WHERE user_id=$1 AND purpose=$2 AND used_at IS NULL",
+      [user.id, purpose],
+    );
+    await db.query(
+      "INSERT INTO auth_tokens(id,user_id,purpose,token_hash,expires_at) VALUES($1,$2,$3,$4,now()+($5 * interval '1 minute'))",
+      [
+        randomUUID(),
+        user.id,
+        purpose,
+        digest(token),
+        purpose === "verify" ? 1440 : 30,
+      ],
+    );
+  });
+  try {
+    await sendTokenEmail(user.email, token, purpose);
+  } catch (error) {
+    console.log(error);
+    throw new HttpError(
+      503,
+      "Email failed. Please try again.",
+      "MAIL_UNAVAILABLE",
+    );
+  }
+}
 
 function signToken(userId: string) {
   return jwt.sign({ userId }, JWT_SECRET, {
@@ -124,6 +158,97 @@ export const logout: RequestHandler = (_req, res) => {
   const { maxAge, ...clearOptions } = cookieOptions;
   res.clearCookie(COOKIE_NAME, clearOptions);
   res.status(204).end();
+};
+
+export const forgot: RequestHandler = async (req, res, next) => {
+  const { email } = req.body;
+
+  const user = await pool.query<Users>("SELECT * FROM USERS WHERE email = $1", [
+    email,
+  ]);
+
+  if (!user.rows[0]?.email) {
+    return res.status(404).json({ error: "Email not found!" });
+  } else {
+    await emailToken(user.rows[0], "reset");
+    res
+      .status(202)
+      .json({ message: "A password reset link has been sent to your email." });
+  }
+};
+
+export const reset: RequestHandler = async (req, res) => {
+  const { token, password } = req.validated as {
+    token: string;
+    password: string;
+  };
+
+  const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+
+  await transaction(async (db) => {
+    const row = (
+      await db.query(
+        "SELECT * FROM auth_tokens WHERE token_hash=$1 AND purpose='reset' AND used_at IS NULL AND expires_at>now() FOR UPDATE",
+        [digest(token)],
+      )
+    ).rows[0];
+    if (!row)
+      throw new HttpError(
+        400,
+        "This password reset link is invalid or expired.",
+        "TOKEN_INVALID",
+      );
+    await db.query("UPDATE users SET password=$1 WHERE id=$2", [
+      passwordHash,
+      row.user_id,
+    ]);
+    await db.query(
+      "UPDATE auth_tokens SET used_at=now() WHERE user_id=$1 AND purpose='reset' AND used_at IS NULL",
+      [row.user_id],
+    );
+    // await db.query(
+    //   "UPDATE auth_sessions SET revoked_at=now() WHERE user_id=$1",
+    //   [row.user_id],
+    // );
+  });
+
+  return res
+    .status(200)
+    .json({ message: "Password changed. Sign in with your new password." });
+};
+
+export const changePassword: RequestHandler = async (req, res, next) => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.userId;
+  try {
+    const result = await pool.query<Users>(
+      "SELECT * FROM USERS WHERE id = $1",
+      [userId],
+    );
+
+    const user = result.rows[0];
+
+    if (!user) {
+      return res.status(400).json({
+        error: "Check password and number.",
+      });
+    }
+
+    const valid = await bcrypt.compare(currentPassword, user.password);
+
+    if (!valid) {
+      return res.status(404).json({ error: "Current password is incorrect." });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+    await pool.query("UPDATE USERS SET password=$1 WHERE id = $2", [
+      hashedPassword,
+      userId,
+    ]);
+    res.status(200).json({ message: "Password changed!" });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const getUser: RequestHandler = async (req, res, next) => {

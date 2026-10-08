@@ -10,6 +10,8 @@ import Preferences from "./components/Preferences";
 import UserJobHistory from "./components/UserJobHistory";
 import Footer from "./components/Footer";
 import UserProfile from "./components/UserProfile";
+import ForgotPassword from "./components/(auth)/ForgotPassword";
+import ResetPassword from "./components/(auth)/ResetPassword";
 
 function App() {
   return (
@@ -47,6 +49,8 @@ function AppRoutes() {
         path="/user-profile"
         element={user ? <UserProfile /> : <Navigate to="/login" replace />}
       />
+      <Route path="/me-no-remember" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/" element={<LandingPage />} />
     </Routes>
   );

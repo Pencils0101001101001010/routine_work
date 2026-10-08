@@ -6,12 +6,14 @@ import { useAuth } from "../../../context/auth-context";
 import { toast } from "react-hot-toast";
 import type { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { parseApiError } from "../../utils/apiError";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
     whatsapp_number: "",
     password: "",
   });
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
   const [isLogin, setIsLogin] = useState(false);
   const { login } = useAuth();
   const navigation = useNavigate();
@@ -28,18 +30,17 @@ export default function LoginPage() {
   const handelSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLogin(true);
+    setFieldErrors({});
+    const toastId = toast.loading("Logging in.");
     try {
-      await toast.promise(login(formData.whatsapp_number, formData.password), {
-        loading: "Logging in...",
-        success: "Welcome back. ",
-        error: (err: unknown) => {
-          const axiosErr = err as AxiosError<{ error: string }>;
-          return axiosErr.response?.data?.error || "Login failed.";
-        },
-      });
+      (await login(formData.whatsapp_number, formData.password),
+        toast.success("Welcome!", { id: toastId }));
+
       navigation("/");
     } catch (error) {
-      // toast will handle catch
+      const { message, fieldErrors } = parseApiError(error, "Login failed.");
+      setFieldErrors(fieldErrors);
+      toast.error(message, { id: toastId });
     } finally {
       setIsLogin(false);
     }
@@ -63,6 +64,7 @@ export default function LoginPage() {
         inputLabel="Phone Number"
         onChange={handleOnChange}
         value={formData.whatsapp_number}
+        error={fieldErrors.whatsapp_number?.[0]}
         required
       />
       <InputFields
@@ -71,13 +73,14 @@ export default function LoginPage() {
         inputLabel="Password"
         onChange={handleOnChange}
         value={formData.password}
+        error={fieldErrors.password?.[0]}
         required
       />
       <AuthButton type="submit" disabled={isLogin} isSubmitting={isLogin}>
         {isLogin ? "Logging in" : "Login"}
       </AuthButton>
-      <p>
-        Don't have an account?{" "}
+      <p className="flex fle-col ">
+        Don't have an account?
         <Link
           to={"/register"}
           className="underline text-green-600 hover:text-green-400"
@@ -85,6 +88,12 @@ export default function LoginPage() {
           Register
         </Link>
       </p>
+      <Link
+        to={"/me-no-remember"}
+        className="underline text-green-600 hover:text-green-400"
+      >
+        Forgot password?
+      </Link>
     </form>
   );
 }
