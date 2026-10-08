@@ -4,7 +4,6 @@ import InputFields from "../(reusable)/InputFields";
 import logo from "../../assets/maskable-icon-512x512.png";
 import { useAuth } from "../../../context/auth-context";
 import { toast } from "react-hot-toast";
-import type { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { parseApiError } from "../../utils/apiError";
 
