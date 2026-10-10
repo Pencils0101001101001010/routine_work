@@ -17,8 +17,7 @@ interface ProfileForm {
   whatsapp_number: string;
 }
 
-//Will improve this page asap
-//* Include a conditional check for the edit for to make sure no api request gets sent when the data is the shame
+// Add change password functionality
 export default function UserProfile() {
   const navigate = useNavigate();
   const { logout, updateUser } = useAuth();
