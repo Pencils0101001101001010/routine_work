@@ -48,7 +48,7 @@ export default function UserMenu() {
       {open && (
         <ul
           role="menu"
-          className="absolute right-0 mt-2 w-44 rounded-md  bg-[#02593C] text-green-400 shadow-lg z-50 py-1"
+          className="absolute right-0 mt-2 w-44 rounded-md bg-[#00000068] backdrop-blur-md shadow-lg z-50 py-1"
         >
           <li role="none">
             <Link

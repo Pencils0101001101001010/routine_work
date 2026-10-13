@@ -218,7 +218,7 @@ export const reset: RequestHandler = async (req, res) => {
 };
 
 export const changePassword: RequestHandler = async (req, res, next) => {
-  const { currentPassword, newPassword } = req.body;
+  const { currentPassword, password } = req.body;
   const userId = req.userId;
   try {
     const result = await pool.query<Users>(
@@ -240,7 +240,7 @@ export const changePassword: RequestHandler = async (req, res, next) => {
       return res.status(404).json({ error: "Current password is incorrect." });
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     await pool.query("UPDATE USERS SET password=$1 WHERE id = $2", [
       hashedPassword,
       userId,

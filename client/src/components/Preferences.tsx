@@ -107,7 +107,7 @@ export default function Preferences() {
   }, []);
 
   return (
-    <div className="h-full">
+    <div className="h-full min-h-screen">
       <form onSubmit={handleSubmit} className="mb-5">
         <span className="flex flex-col md:flex-row items-center justify-center mb-5 gap-5">
           <InputFields
@@ -134,7 +134,7 @@ export default function Preferences() {
               name="distance"
               value={formData.distance}
               onChange={handleChange}
-              className="rounded-2xl shadow-2xl border-l border-r border-green-400 bg-green-950 mb-2 px-3 py-2 text-white focus:border-green-400 focus:outline-hidden focus:ring-2 focus:ring-green-400/40 focus:zoom-110 focus:shadow-2xl focus:mb-4 " // match your other inputs' styling
+              className="rounded-2xl shadow-2xl border-l border-r border-green-400  mb-2 px-3 py-2 text-white focus:border-green-400 focus:outline-hidden focus:ring-2 focus:ring-green-400/40 focus:zoom-110 focus:shadow-2xl focus:mb-4 bg-[#000000c1] backdrop-blur-md" // match your other inputs' styling
             >
               <option value={10}>10km</option>
               <option value={20}>20km</option>

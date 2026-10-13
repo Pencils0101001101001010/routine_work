@@ -20,7 +20,9 @@ function App() {
         <AuthProvider>
           <Toaster position="top-center" />
           <Navbar />
-          <AppRoutes />
+          <main className="flex-1 pt-16">
+            <AppRoutes />
+          </main>
           <Footer />
         </AuthProvider>
       </BrowserRouter>

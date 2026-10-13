@@ -7,8 +7,8 @@ export default function Navbar() {
   const { user } = useAuth();
 
   return (
-    <nav className="flex flex-row items-center justify-between px-4 h-12">
-      <Link to="/" className="flex items-center">
+    <nav className="flex flex-row items-center bg-[#00000068] backdrop-blur-md fixed z-10 w-full justify-between px-4 h-12">
+      <Link to="/" className="flex items-center font-extrabold text-2xl">
         <img
           src={logo}
           alt="Routine Work logo"

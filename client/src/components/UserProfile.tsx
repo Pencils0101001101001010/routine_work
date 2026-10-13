@@ -4,7 +4,7 @@ import api from "../../api/client";
 import type { AxiosError } from "axios";
 import { useAuth } from "../../context/auth-context";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState, type SubmitEvent } from "react";
+import React, { useEffect, useRef, useState, type SubmitEvent } from "react";
 import InputFields from "./(reusable)/InputFields";
 import type { User } from "../../types";
 import UserProfileFields from "./(reusable)/UserProfileFields";
@@ -28,7 +28,13 @@ export default function UserProfile() {
     email: "",
     whatsapp_number: "",
   });
+
   const [userData, setUserData] = useState<User | null>(null);
+  const [password, setPassword] = useState({
+    currentPassword: "",
+    password: "",
+  });
+  const [changePassword, setChangePassword] = useState<boolean>(false);
 
   const getUser = async () => {
     try {
@@ -55,6 +61,44 @@ export default function UserProfile() {
     } catch {
       // toast already shows the error
     }
+  };
+
+  const editPassword = () => {
+    setChangePassword(true);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setPassword((prevPass) => ({
+      ...prevPass,
+      [name]: value,
+    }));
+  };
+
+  const cancelPasswordChange = () => {
+    setChangePassword(false);
+  };
+
+  const submitPasswordChange = async (
+    e: React.SubmitEvent<HTMLFormElement>,
+  ) => {
+    e.preventDefault();
+    try {
+      await toast.promise(
+        api.patch("/user/password-change", password),
+
+        {
+          loading: "Updating password...",
+          success: "Password updated. ",
+          error: (err: unknown) => {
+            const axiosErr = err as AxiosError<{ error: string }>;
+            return axiosErr.response?.data?.error || "Update failed";
+          },
+        },
+      );
+      setChangePassword(false);
+    } catch (error) {}
   };
 
   const handleOpenEditForm = () => {
@@ -112,13 +156,13 @@ export default function UserProfile() {
   }, []);
 
   return (
-    <section className=" flex flex-col h-full justify-center relative items-center">
+    <section className=" flex flex-col h-full mt-auto justify-center relative items-center ">
       {openEditing ? (
         <>
           <h1 className="text-2xl">Edit user info</h1>
           <form
             onSubmit={handelSubmit}
-            className="flex flex-col items-center w-75 md:w-3xl p-5 rounded-2xl justify-around mt-30 mb-30  shadow-2xl border-l border-r border-green-400"
+            className="flex flex-col items-center w-75 md:w-3xl p-5 rounded-2xl justify-around mt-30 mb-30  shadow-2xl border-l border-r border-green-400 bg-[#00000068] backdrop-blur-md "
           >
             <InputFields
               name="name"
@@ -141,16 +185,16 @@ export default function UserProfile() {
               inputLabel="Whatsapp Num"
               value={draft.whatsapp_number}
             />
-            <AuthButton title="Submit" type="submit">
-              Submit
-            </AuthButton>
-          </form>
 
-          <div className="absolute top-10 right-5">
-            <AuthButton onClick={() => setOpenEditing(false)}>
-              Cancel
-            </AuthButton>
-          </div>
+            <div className="flex flex-col py-5">
+              <AuthButton title="Submit" type="submit">
+                Submit
+              </AuthButton>
+              <AuthButton onClick={() => setOpenEditing(false)}>
+                Cancel
+              </AuthButton>
+            </div>
+          </form>
         </>
       ) : (
         <>
@@ -161,22 +205,57 @@ export default function UserProfile() {
             />
           </PopupModal>
           <h1 className="text-2xl">User Profile</h1>
-          <div className="flex flex-col  w-75 md:w-3xl text-center justify-around  h-100  px-5 py-5 rounded-2xl shadow-2xl border-l border-r border-green-400 mt-30 mb-30">
+          <div className="flex flex-col  w-75 md:w-3xl text-center justify-around  h-100  px-5 py-5 rounded-2xl shadow-2xl border-l border-r bg-[#00000068] backdrop-blur-md border-green-400 mt-15 mb-10">
             <UserProfileFields label="Name" userData={userData?.name} />
             <UserProfileFields label="Email" userData={userData?.email} />
             <UserProfileFields
               label="Number"
               userData={userData?.whatsapp_number}
             />
-            <AuthButton onClick={handleConfirmDelete}>
-              Delete Profile
-            </AuthButton>
-          </div>
-          <div className="absolute top-10 right-10">
+
             <AuthButton onClick={handleOpenEditForm}>Edit</AuthButton>
-          </div>
+          </div>{" "}
         </>
       )}
+
+      {changePassword ? (
+        <form
+          onSubmit={submitPasswordChange}
+          className="flex flex-col items-center w-75 md:w-3xl p-5 rounded-2xl justify-around mt-10 mb-5 shadow-2xl border-l border-r border-green-400 "
+        >
+          <InputFields
+            name="currentPassword"
+            type="text"
+            value={password.currentPassword}
+            onChange={handlePasswordChange}
+            inputLabel="Current Password"
+            required
+          />
+          <InputFields
+            name="password"
+            type="text"
+            value={password.password}
+            onChange={handlePasswordChange}
+            inputLabel="New Password"
+            required
+          />
+          <AuthButton title="Submit" type="submit">
+            Submit
+          </AuthButton>
+          <AuthButton type="button" onClick={cancelPasswordChange}>
+            Cancel
+          </AuthButton>
+        </form>
+      ) : (
+        <div>
+          <h1 className="text-2xl text-center">Change Password</h1>
+          <div className="flex flex-col  w-75 md:w-3xl text-center justify-around bg-[#00000068] backdrop-blur-md  h-50  px-5 py-5 rounded-2xl shadow-2xl border-l border-r border-green-400 mt-10 mb-10">
+            <UserProfileFields label="Password" userData="*******" />
+            <AuthButton onClick={editPassword}>Edit</AuthButton>
+          </div>
+        </div>
+      )}
+      <AuthButton onClick={handleConfirmDelete}>Delete Profile</AuthButton>
     </section>
   );
 }

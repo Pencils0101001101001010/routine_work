@@ -14,9 +14,9 @@
   background: #020024;
   background: linear-gradient(
     225deg,
-    rgb(2, 93, 63) 0%,
-    rgb(1, 50, 37) 35%,
-    rgb(0, 47, 35) 100%
+    rgb(1, 50, 5) 0%,
+    rgb(0, 0, 0) 35%,
+    rgb(2, 18, 1) 100%
   );
   font-synthesis: none;
   text-rendering: optimizeLegibility;

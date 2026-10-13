@@ -64,7 +64,7 @@ export default function RegisterPage() {
       <img
         src={logo}
         alt="Routine Works logo"
-        className="w-36 h-36 rounded-full"
+        className="w-22 h-22 rounded-full"
       />
       <p className="text-2xl mb-4  font-extrabold  ">Routine Works!</p>
 
