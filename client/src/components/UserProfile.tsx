@@ -4,7 +4,7 @@ import api from "../../api/client";
 import type { AxiosError } from "axios";
 import { useAuth } from "../../context/auth-context";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useRef, useState, type SubmitEvent } from "react";
+import React, { useEffect, useState, type SubmitEvent } from "react";
 import InputFields from "./(reusable)/InputFields";
 import type { User } from "../../types";
 import UserProfileFields from "./(reusable)/UserProfileFields";
