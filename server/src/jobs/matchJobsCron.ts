@@ -1,13 +1,17 @@
-import cron from "node-cron";
 import type { GroupedSearch } from "../types/index.js";
 import {
   getActivePreferences,
   markChecked,
 } from "../models/preferenceModal.js";
-import { searchJobs, searchJobsWithRetry } from "../services/adzunaService.js";
-import { findNewMatches } from "../services/matchingService.js";
+import { searchJobsWithRetry } from "../services/adzunaService.js";
+import { findNewMatches, noMatchesFound } from "../services/matchingService.js";
 import { sendMatchNotification } from "../services/emailServices.js";
 import { logNotification } from "../models/notificationModel.js";
+import pool from "../db/db.js";
+import { sendNoMatchNotification } from "../services/no-match.service.js";
+// import cron from "node-cron";
+
+//&Once we have a paid plan on render we can use node-cron job to run this everyday 8 am
 
 function groupByTitleAndLocation(
   prefs: Awaited<ReturnType<typeof getActivePreferences>>,
@@ -67,12 +71,22 @@ export async function runMatchJob(): Promise<void> {
     for (const user of search.users) {
       try {
         const newMatches = await findNewMatches(user.preferenceId, jobs);
-
-        //^ Add a second mail for jobs not found to let users know to change their preference
-
-        console.log(
-          `${newMatches.length} new matches for ${user.email} on "${search.jobTitle}"`,
+        const noMatches = await noMatchesFound(
+          user.preferenceId,
+          jobs,
+          newMatches,
         );
+
+        if (noMatches.length >= 2) {
+          for (const noMatch of noMatches) {
+            sendNoMatchNotification(user.email, noMatch);
+          }
+
+          await pool.query(
+            `DELETE FROM preference_not_matched WHERE preference_id = $1`,
+            [user.preferenceId],
+          );
+        }
 
         for (const match of newMatches) {
           let result = await sendMatchNotification(user.email, match);
@@ -96,10 +110,10 @@ export async function runMatchJob(): Promise<void> {
             match.sourceUrl,
           );
         }
-        console.log("-------------Finished with cron job-------------------");
       } catch (err) {
         console.error(`Error processing preference ${user.preferenceId}:`, err);
       } finally {
+        console.log("-------------Finished with cron job-------------------");
         await markChecked(user.preferenceId);
       }
     }

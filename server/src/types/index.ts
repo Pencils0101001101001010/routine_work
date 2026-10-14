@@ -58,3 +58,11 @@ export interface JobMatch {
   company: string;
   sourceUrl: string;
 }
+
+export interface PreferenceNotMatched {
+  id: string;
+  user_id: string;
+  preferenceId: string;
+  job_title: string;
+  location: string;
+}

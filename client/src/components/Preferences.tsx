@@ -22,7 +22,6 @@ export default function Preferences() {
         api.get<JobPreference[]>("/job/all-preferences"),
         {
           loading: "Loading Preferences",
-          success: "Done.",
           error: (err: unknown) => {
             const axiosErr = err as AxiosError<{ error: string }>;
             return axiosErr.response?.data?.error || "failed to load users";

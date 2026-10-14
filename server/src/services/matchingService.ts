@@ -1,7 +1,9 @@
-//Logic to compare the new returning jobs data from adzuna and then comparing it with the existing data in our db
-
 import pool from "../db/db.js";
-import type { AdzunaJob, JobMatch } from "../types/index.js";
+import type {
+  AdzunaJob,
+  JobMatch,
+  PreferenceNotMatched,
+} from "../types/index.js";
 
 export async function findNewMatches(
   preferenceId: string,
@@ -38,4 +40,39 @@ export async function findNewMatches(
   }
 
   return newMatches;
+}
+
+export async function noMatchesFound(
+  preferenceId: string,
+  jobs: AdzunaJob[],
+  newMatches: JobMatch[],
+): Promise<PreferenceNotMatched[]> {
+  if (jobs.length > 0 || newMatches.length > 0) return [];
+
+  try {
+    if (newMatches.length > 0) {
+      await pool.query(
+        `DELETE FROM preference_not_matched WHERE preference_id = $1`,
+        [preferenceId],
+      );
+    }
+    await pool.query(
+      `INSERT INTO preference_not_matched (preference_id, user_id, job_title, location)
+       SELECT id, user_id, job_title, location
+       FROM job_preferences
+       WHERE id = $1`,
+      [preferenceId],
+    );
+
+    const { rows } = await pool.query<PreferenceNotMatched>(
+      `SELECT * FROM preference_not_matched WHERE preference_id = $1`,
+      [preferenceId],
+    );
+    return rows;
+  } catch (error) {
+    throw new Error(
+      `Insert into preference_not_matched failed for preference ${preferenceId}`,
+      { cause: error },
+    );
+  }
 }
