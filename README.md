@@ -25,7 +25,7 @@ The notification layer is built as an isolated service (`emailService.ts`) so it
 - **Backend:** Node.js + Express + TypeScript
 - **Database:** PostgreSQL
 - **Job data source:** [Adzuna API](https://developer.adzuna.com/) (South Africa index)
-- **Email:** Nodemailer, via SMTP
+- **Email:** Resend
 - **Scheduling:** `node-cron`
 - **Auth:** JWT + bcrypt
 
@@ -41,7 +41,7 @@ Backend API (Express)
 PostgreSQL
    ▲
    │  read active preferences
-Cron worker (daily)
+Cron worker (Currently not implemented due to free tier server usage and spin down rules. Now we utilizing 3rd party cron-job.org)
    │  fetch listings
    ▼
 Adzuna API
@@ -50,7 +50,7 @@ Adzuna API
 PostgreSQL (dedup + store match)
    │
    ▼
-Email service (Nodemailer)
+Email service (resend)
    │
    ▼
 User's inbox → applies on source site
