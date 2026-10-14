@@ -60,13 +60,15 @@ The cron worker runs independently of any user session — it queries the databa
 
 ## Database schema (overview)
 
-| Table               | Purpose                                                                       |
-| ------------------- | ----------------------------------------------------------------------------- |
-| `users`             | Account info, email, hashed password                                          |
-| `job_preferences`   | A user's saved title + location searches                                      |
-| `job_matches`       | New listings found per preference, deduped against Adzuna's `external_job_id` |
-| `notifications_log` | Record of each notification sent, for retry/debugging                         |
-| `activity_log`      | Logged user actions, powers the activity tracker UI                           |
+| Table                    | Purpose                                                                       |
+| ------------------------ | ----------------------------------------------------------------------------- |
+| `users`                  | Account info, email, hashed password                                          |
+| `job_preferences`        | A user's saved title + location searches                                      |
+| `job_matches`            | New listings found per preference, deduped against Adzuna's `external_job_id` |
+| `notifications_log`      | Record of each notification sent, for retry/debugging                         |
+| `activity_log`           | Logged user actions, powers the activity tracker UI                           |
+| `preference_not_matched` | Record of each preference not match to handle appropriate mails to users      |
+| `auth_tokens`            | On password reset we log a unique token with user email and created at info   |
 
 `job_matches` has a unique index on `(preference_id, external_job_id)` to guarantee no duplicate match is ever stored or notified on twice.
 
