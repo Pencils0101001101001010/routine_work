@@ -1,3 +1,4 @@
+import million from "million/compiler";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import babel from "@rolldown/plugin-babel";
 import { defineConfig } from "vite";
@@ -5,6 +6,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [
+    million.vite({ auto: true }),
     react(),
     tailwindcss(),
     babel({ presets: [reactCompilerPreset()] }),

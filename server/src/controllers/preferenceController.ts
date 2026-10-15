@@ -2,7 +2,9 @@ import type { RequestHandler } from "express";
 import pool from "../db/db.js";
 import type { JobPreference } from "../types/index.js";
 
-const MAX_PREFERENCES = 5;
+const DEFAULT_MAX_PREFERENCES = 5;
+const OWNER_MAX_PREFERENCES = 25;
+const OWNER_ID = "15df997d-b267-4437-97a5-f3e98e6befbb";
 
 export const addPreferences: RequestHandler = async (req, res, next) => {
   const { job_title, location, distance, active } = req.body;
@@ -12,6 +14,9 @@ export const addPreferences: RequestHandler = async (req, res, next) => {
     return res.status(400).json({ error: "All fields are required." });
   }
 
+  const maxPreferences =
+    userId === OWNER_ID ? OWNER_MAX_PREFERENCES : DEFAULT_MAX_PREFERENCES;
+
   try {
     const countResult = await pool.query(
       "SELECT COUNT(*) FROM job_preferences WHERE user_id = $1",
@@ -20,9 +25,9 @@ export const addPreferences: RequestHandler = async (req, res, next) => {
 
     const currentCount = parseInt(countResult.rows[0].count, 10);
 
-    if (currentCount >= MAX_PREFERENCES) {
+    if (currentCount >= maxPreferences) {
       return res.status(429).json({
-        error: `You've reached the maximum of ${MAX_PREFERENCES} job preferences. Delete one to add another.`,
+        error: `You've reached the maximum of ${DEFAULT_MAX_PREFERENCES} job preferences. Delete one to add another.`,
       });
     }
 

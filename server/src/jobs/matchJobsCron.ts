@@ -9,14 +9,16 @@ import { sendMatchNotification } from "../services/emailServices.js";
 import { logNotification } from "../models/notificationModel.js";
 import pool from "../db/db.js";
 import { sendNoMatchNotification } from "../services/no-match.service.js";
-// import cron from "node-cron";
 
-//&Once we have a paid plan on render we can use node-cron job to run this everyday 8 am
+// import cron from "node-cron";
+//& Once we have a paid plan on render we can use node-cron job to run this everyday 8 am
 
 function groupByTitleAndLocation(
   prefs: Awaited<ReturnType<typeof getActivePreferences>>,
 ): GroupedSearch[] {
+  //^ The Map object holds key-value pairs and remembers the original insertion order of the keys.
   const map = new Map<string, GroupedSearch>();
+
   for (const p of prefs) {
     const key = `${p.jobTitle.toLowerCase()}|${p.location.toLowerCase()}`;
     if (!map.has(key))

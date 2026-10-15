@@ -5,7 +5,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   inputPlaceholder?: string;
   error?: string;
 }
-
+// million-ignore
 export default function InputFields({
   inputLabel,
   inputPlaceholder,

@@ -3,6 +3,7 @@ import type { JobMatch } from "../types/index.js";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+//! Can I add a button to this email that tracks the users clicks to link to active heat map on their profile ?
 export async function sendMatchNotification(
   email: string,
   match: JobMatch,
