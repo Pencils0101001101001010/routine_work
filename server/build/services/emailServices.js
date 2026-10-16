@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
+//! Can I add a button to this email that tracks the users clicks to link to active heat map on their profile ?
 export async function sendMatchNotification(email, match) {
     const titleIfNull = match.title || "an available vacancy";
     const companyIfNull = match.company || "This company is";

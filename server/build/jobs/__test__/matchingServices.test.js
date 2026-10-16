@@ -23,7 +23,7 @@ describe("findNewMatches", () => {
                 redirect_url: "url",
             },
         ];
-        const result = await findNewMatches("pref1", jobs);
+        const result = await findNewMatches("pref1", "user1", jobs);
         expect(result).toHaveLength(0);
         expect(mockQuery).toHaveBeenCalledTimes(1);
     });
@@ -39,7 +39,7 @@ describe("findNewMatches", () => {
                 redirect_url: "url",
             },
         ];
-        const result = await findNewMatches("pref1", jobs);
+        const result = await findNewMatches("pref1", "user1", jobs);
         expect(result).toHaveLength(1);
         expect(mockQuery).toHaveBeenCalledTimes(2);
     });

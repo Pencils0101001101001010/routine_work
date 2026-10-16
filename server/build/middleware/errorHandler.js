@@ -1,3 +1,4 @@
+import { HttpError } from "../util/errors.js";
 // A small helper to throw errors with a specific status code
 // from anywhere in controllers/services, instead of only ever
 // getting generic 500s in the catch block.
@@ -15,6 +16,13 @@ export const errorHandler = (err, req, res, next) => {
     // Errors you threw on purpose, with a specific status code already attached
     if (err instanceof AppError) {
         return res.status(err.statusCode).json({ error: err.message });
+    }
+    if (err instanceof HttpError) {
+        return res.status(err.status).json({
+            error: err.message,
+            code: err.code,
+            details: err.details,
+        });
     }
     // Postgres unique constraint violation (e.g. duplicate whatsapp_number)
     const pgErr = err;

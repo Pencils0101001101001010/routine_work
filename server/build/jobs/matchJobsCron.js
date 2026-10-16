@@ -1,15 +1,24 @@
-import cron from "node-cron";
 import { getActivePreferences, markChecked, } from "../models/preferenceModal.js";
-import { searchJobs, searchJobsWithRetry } from "../services/adzunaService.js";
-import { findNewMatches } from "../services/matchingService.js";
+import { searchJobsWithRetry } from "../services/adzunaService.js";
+import { findNewMatches, noMatchesFound } from "../services/matchingService.js";
 import { sendMatchNotification } from "../services/emailServices.js";
 import { logNotification } from "../models/notificationModel.js";
+import pool from "../db/db.js";
+import { sendNoMatchNotification } from "../services/no-match.service.js";
+// import cron from "node-cron";
+//& Once we have a paid plan on render we can use node-cron job to run this everyday 8 am
 function groupByTitleAndLocation(prefs) {
+    //^ The Map object holds key-value pairs and remembers the original insertion order of the keys.
     const map = new Map();
     for (const p of prefs) {
         const key = `${p.jobTitle.toLowerCase()}|${p.location.toLowerCase()}`;
         if (!map.has(key))
-            map.set(key, { jobTitle: p.jobTitle, location: p.location, users: [] });
+            map.set(key, {
+                jobTitle: p.jobTitle,
+                location: p.location,
+                distance: p.distance,
+                users: [],
+            });
         map.get(key).users.push({
             userId: p.userId,
             email: p.email,
@@ -29,8 +38,8 @@ export async function runMatchJob() {
     for (const search of groupedSearches) {
         let jobs;
         try {
-            jobs = await searchJobsWithRetry(search.jobTitle, search.location);
-            console.log(`"${search.jobTitle}" in "${search.location}": Adzuna returned ${jobs.length} jobs`);
+            jobs = await searchJobsWithRetry(search.jobTitle, search.location, search.distance);
+            console.log(`"${search.jobTitle}" in "${search.location}": Adzuna returned ${jobs.length} jobs, within ${search.distance} from location`);
         }
         catch (err) {
             console.error(`Skipping search "${search.jobTitle}" in "${search.location}" — Adzuna fetch failed:`, err);
@@ -41,9 +50,14 @@ export async function runMatchJob() {
         }
         for (const user of search.users) {
             try {
-                const newMatches = await findNewMatches(user.preferenceId, jobs);
-                //^ Add a second mail for jobs not found to let users know to change their preference
-                console.log(`${newMatches.length} new matches for ${user.email} on "${search.jobTitle}"`);
+                const newMatches = await findNewMatches(user.preferenceId, user.userId, jobs);
+                const noMatches = await noMatchesFound(user.preferenceId, jobs, newMatches);
+                if (noMatches.length >= 2) {
+                    for (const noMatch of noMatches) {
+                        await sendNoMatchNotification(user.email, noMatch);
+                    }
+                    await pool.query(`DELETE FROM preference_not_matched WHERE preference_id = $1`, [user.preferenceId]);
+                }
                 for (const match of newMatches) {
                     let result = await sendMatchNotification(user.email, match);
                     for (let i = 0; i < MAX_RETRIES; i++) {
@@ -56,14 +70,20 @@ export async function runMatchJob() {
                                 break;
                         }
                     }
-                    await logNotification(user.userId, match.id, match.title, match.company, result.success ? "sent" : "failed", match.sourceUrl);
+                    await logNotification(user.userId, match.id, match.title, match.company, result.success ? "sent" : "failed", match.sourceUrl, match.externalJobId);
+                    if (!result.success) {
+                        // let tomorrow's run retry this job
+                        await pool.query("DELETE FROM job_matches WHERE id = $1", [
+                            match.id,
+                        ]);
+                    }
                 }
-                console.log("-------------Finished with cron job-------------------");
             }
             catch (err) {
                 console.error(`Error processing preference ${user.preferenceId}:`, err);
             }
             finally {
+                console.log("-------------Finished with cron job-------------------");
                 await markChecked(user.preferenceId);
             }
         }

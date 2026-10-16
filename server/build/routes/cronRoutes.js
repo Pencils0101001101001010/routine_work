@@ -7,14 +7,10 @@ router.post("/run-match-job", async (req, res) => {
     if (secret !== process.env.CRON_SECRET) {
         return res.sendStatus(401);
     }
-    try {
-        await runMatchJob();
-        res.sendStatus(200);
-    }
-    catch (error) {
+    res.sendStatus(200);
+    runMatchJob().catch((error) => {
         console.error("Cron job failed:", error);
-        res.sendStatus(500);
-    }
+    });
 });
 export default router;
 //# sourceMappingURL=cronRoutes.js.map

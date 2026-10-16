@@ -72,7 +72,11 @@ export async function runMatchJob(): Promise<void> {
 
     for (const user of search.users) {
       try {
-        const newMatches = await findNewMatches(user.preferenceId, jobs);
+        const newMatches = await findNewMatches(
+          user.preferenceId,
+          user.userId,
+          jobs,
+        );
         const noMatches = await noMatchesFound(
           user.preferenceId,
           jobs,
@@ -81,7 +85,7 @@ export async function runMatchJob(): Promise<void> {
 
         if (noMatches.length >= 2) {
           for (const noMatch of noMatches) {
-            sendNoMatchNotification(user.email, noMatch);
+            await sendNoMatchNotification(user.email, noMatch);
           }
 
           await pool.query(
@@ -110,7 +114,15 @@ export async function runMatchJob(): Promise<void> {
             match.company,
             result.success ? "sent" : "failed",
             match.sourceUrl,
+            match.externalJobId,
           );
+
+          if (!result.success) {
+            // let tomorrow's run retry this job
+            await pool.query("DELETE FROM job_matches WHERE id = $1", [
+              match.id,
+            ]);
+          }
         }
       } catch (err) {
         console.error(`Error processing preference ${user.preferenceId}:`, err);

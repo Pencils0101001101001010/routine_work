@@ -1,18 +1,24 @@
-//Logic to compare the new returning jobs data from adzuna and then comparing it with the existing data in our db
 import pool from "../db/db.js";
-export async function findNewMatches(preferenceId, jobs) {
+export async function findNewMatches(preferenceId, userId, jobs) {
     const newMatches = [];
     for (const job of jobs) {
-        const existing = await pool.query(`SELECT id FROM job_matches WHERE preference_id = $1 AND external_job_id = $2`, [preferenceId, job.id]);
+        const externalId = String(job.id);
+        const existing = await pool.query(`SELECT 1 FROM notification_log
+    WHERE user_id = $1 AND external_job_id = $2 AND status = 'sent'
+   UNION ALL
+   SELECT 1 FROM job_matches jm
+     JOIN job_preferences jp ON jp.id = jm.preference_id
+    WHERE jp.user_id = $1 AND jm.external_job_id = $2
+   LIMIT 1`, [userId, externalId]);
         if (existing.rows.length > 0)
             continue; // already seen, skip
         const inserted = await pool.query(`INSERT INTO job_matches (preference_id, external_job_id, title, company, source_url)
        VALUES ($1, $2, $3, $4, $5) RETURNING id, preference_id AS "preferenceId", external_job_id AS "externalJobId",
           title, company, source_url AS "sourceUrl"`, [
             preferenceId,
-            job.id,
+            externalId,
             job.title,
-            job.company.display_name,
+            job.company?.display_name ?? null,
             job.redirect_url,
         ]);
         const insertedRow = inserted.rows[0];
@@ -22,5 +28,23 @@ export async function findNewMatches(preferenceId, jobs) {
         newMatches.push(insertedRow);
     }
     return newMatches;
+}
+export async function noMatchesFound(preferenceId, jobs, newMatches) {
+    if (jobs.length > 0 || newMatches.length > 0)
+        return [];
+    try {
+        if (newMatches.length > 0) {
+            await pool.query(`DELETE FROM preference_not_matched WHERE preference_id = $1`, [preferenceId]);
+        }
+        await pool.query(`INSERT INTO preference_not_matched (preference_id, user_id, job_title, location)
+       SELECT id, user_id, job_title, location
+       FROM job_preferences
+       WHERE id = $1`, [preferenceId]);
+        const { rows } = await pool.query(`SELECT * FROM preference_not_matched WHERE preference_id = $1`, [preferenceId]);
+        return rows;
+    }
+    catch (error) {
+        throw new Error(`Insert into preference_not_matched failed for preference ${preferenceId}`, { cause: error });
+    }
 }
 //# sourceMappingURL=matchingService.js.map

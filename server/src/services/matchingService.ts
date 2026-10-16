@@ -7,14 +7,22 @@ import type {
 
 export async function findNewMatches(
   preferenceId: string,
+  userId: string,
   jobs: AdzunaJob[],
 ): Promise<JobMatch[]> {
   const newMatches: JobMatch[] = [];
 
   for (const job of jobs) {
+    const externalId = String(job.id);
     const existing = await pool.query(
-      `SELECT id FROM job_matches WHERE preference_id = $1 AND external_job_id = $2`,
-      [preferenceId, job.id],
+      `SELECT 1 FROM notification_log
+    WHERE user_id = $1 AND external_job_id = $2 AND status = 'sent'
+   UNION ALL
+   SELECT 1 FROM job_matches jm
+     JOIN job_preferences jp ON jp.id = jm.preference_id
+    WHERE jp.user_id = $1 AND jm.external_job_id = $2
+   LIMIT 1`,
+      [userId, externalId],
     );
     if (existing.rows.length > 0) continue; // already seen, skip
 
@@ -24,9 +32,9 @@ export async function findNewMatches(
           title, company, source_url AS "sourceUrl"`,
       [
         preferenceId,
-        job.id,
+        externalId,
         job.title,
-        job.company.display_name,
+        job.company?.display_name ?? null,
         job.redirect_url,
       ],
     );

@@ -1,2 +1,2 @@
-export declare function logNotification(userId: string, matchId: string, title: string, company: string, result: string, sourceUrl: string): Promise<void>;
+export declare function logNotification(userId: string, matchId: string, title: string, company: string | null, result: string, sourceUrl: string, externalJobId: string): Promise<void>;
 //# sourceMappingURL=notificationModel.d.ts.map

@@ -1,20 +1,23 @@
 import pool from "../db/db.js";
-const MAX_PREFERENCES = 5;
+const DEFAULT_MAX_PREFERENCES = 5;
+const OWNER_MAX_PREFERENCES = 25;
+const OWNER_ID = "15df997d-b267-4437-97a5-f3e98e6befbb";
 export const addPreferences = async (req, res, next) => {
-    const { job_title, location, active } = req.body;
+    const { job_title, location, distance, active } = req.body;
     const userId = req.userId;
-    if (!job_title || !location) {
+    if (!job_title || !location || !distance) {
         return res.status(400).json({ error: "All fields are required." });
     }
+    const maxPreferences = userId === OWNER_ID ? OWNER_MAX_PREFERENCES : DEFAULT_MAX_PREFERENCES;
     try {
         const countResult = await pool.query("SELECT COUNT(*) FROM job_preferences WHERE user_id = $1", [userId]);
         const currentCount = parseInt(countResult.rows[0].count, 10);
-        if (currentCount >= MAX_PREFERENCES) {
+        if (currentCount >= maxPreferences) {
             return res.status(429).json({
-                error: `You've reached the maximum of ${MAX_PREFERENCES} job preferences. Delete one to add another.`,
+                error: `You've reached the maximum of ${DEFAULT_MAX_PREFERENCES} job preferences. Delete one to add another.`,
             });
         }
-        const result = await pool.query("INSERT INTO JOB_PREFERENCES (user_id, job_title, location, active) VALUES ($1, $2, $3, $4) RETURNING * ", [userId, job_title, location, active ?? true]);
+        const result = await pool.query("INSERT INTO JOB_PREFERENCES (user_id, job_title, location, distance, active) VALUES ($1, $2, $3, $4, $5) RETURNING * ", [userId, job_title, location, distance, active ?? true]);
         return res.status(201).json(result.rows[0]);
     }
     catch (error) {
@@ -40,12 +43,12 @@ export const getPreferences = async (req, res, next) => {
 export const updatePreferences = async (req, res, next) => {
     const { id } = req.params; //Preference id
     const userId = req.userId;
-    const { job_title, location, active } = req.body;
+    const { job_title, location, distance, active } = req.body;
     if (!userId) {
         return res.status(400).json({ error: "Not authenticated." });
     }
     try {
-        const result = await pool.query("UPDATE JOB_PREFERENCES SET job_title = COALESCE($1, job_title), location = COALESCE($2, location), active = COALESCE($3, active) WHERE user_id = $4 AND id = $5 RETURNING *", [job_title, location, active, userId, id]);
+        const result = await pool.query("UPDATE JOB_PREFERENCES SET job_title = COALESCE($1, job_title), location = COALESCE($2, location), distance = COALESCE($3, distance), active = COALESCE($4, active) WHERE user_id = $5 AND id = $6 RETURNING *", [job_title, location, distance, active, userId, id]);
         if (result.rows.length === 0) {
             return res.status(404).json({ error: "Preference not found." });
         }

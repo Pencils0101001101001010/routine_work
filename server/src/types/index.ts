@@ -19,10 +19,15 @@ export interface JobPreference {
 }
 
 export interface NotificationLog {
+  id: string;
   user_id: string;
-  job_match_id: string;
-  status: string;
+  job_match_id: string | null;
+  status: "sent" | "failed";
   sent_at: string;
+  job_title: string | null;
+  company: string | null;
+  source_url: string;
+  external_job_id: string | null;
 }
 
 export interface UserPreference extends JobPreference {
@@ -45,7 +50,7 @@ export interface GroupedSearch {
 export interface AdzunaJob {
   id: string;
   title: string;
-  company: { display_name: string };
+  company?: { display_name: string };
   location: { display_name: string };
   redirect_url: string;
 }
@@ -55,14 +60,14 @@ export interface JobMatch {
   preferenceId: string;
   externalJobId: string;
   title: string;
-  company: string;
+  company: string | null;
   sourceUrl: string;
 }
 
 export interface PreferenceNotMatched {
   id: string;
   user_id: string;
-  preferenceId: string;
+  preference_id: string;
   job_title: string;
   location: string;
 }
