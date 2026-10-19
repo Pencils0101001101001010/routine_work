@@ -14,6 +14,7 @@ export async function findNewMatches(
 
   for (const job of jobs) {
     const externalId = String(job.id);
+
     const existing = await pool.query(
       `SELECT 1 FROM notification_log
     WHERE user_id = $1 AND external_job_id = $2 AND status = 'sent'
@@ -24,6 +25,7 @@ export async function findNewMatches(
    LIMIT 1`,
       [userId, externalId],
     );
+
     if (existing.rows.length > 0) continue; // already seen, skip
 
     const inserted = await pool.query<JobMatch>(
