@@ -24,7 +24,7 @@ export async function sendNoMatchNotification(
             No job matched
           </p>
           <h1 style="font-size: 21px; line-height: 1.4; margin: 0 0 16px; color: #D9361E;">
-            There was no match found for "${noMatch.job_title}". Try a different title or location. 
+            There was no match found for "${noMatch.job_title}" at zip code ${noMatch.location}. Try a different title or location. 
           </h1>
           <p style="font-size: 15px; line-height: 1.6; margin: 0 0 28px; color: #3a3a3a;">
             By setting a new preference and location, you will increase the chances of receiving more job listings. You can set up to five(5) preferences on your profile. 
