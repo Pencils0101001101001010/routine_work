@@ -11,7 +11,7 @@ export default function Preferences() {
   const [formData, setFormData] = useState<JobPreference>({
     job_title: "",
     location: "",
-    distance: 50,
+    distance: 20,
   });
   const [jobPreference, setJobPreferences] = useState<JobPreference[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,10 +30,12 @@ export default function Preferences() {
       );
 
       setJobPreferences(result.data);
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const onDelete = async (id: any) => {
+  const onDelete = async (id: unknown) => {
     setIsLoading(true);
     try {
       await toast.promise(api.delete(`/job/preference/${id}`), {
@@ -46,6 +48,7 @@ export default function Preferences() {
       });
       await getPreferences();
     } catch (error) {
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -91,18 +94,20 @@ export default function Preferences() {
       setFormData({
         job_title: "",
         location: "",
-        distance: 50,
+        distance: 20,
       });
       await getPreferences();
     } catch (error) {
-      //toast handles this
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    getPreferences();
+    const fetchPreferences = async () => await getPreferences();
+
+    fetchPreferences();
   }, []);
 
   return (
@@ -137,6 +142,8 @@ export default function Preferences() {
             >
               <option value={10}>10km</option>
               <option value={20}>20km</option>
+              <option value={30}>30km</option>
+              <option value={40}>40km</option>
               <option value={50}>50km</option>
               <option value={100}>100km</option>
             </select>
