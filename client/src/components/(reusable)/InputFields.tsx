@@ -4,17 +4,21 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   inputLabel: string;
   inputPlaceholder?: string;
   error?: string;
+  htmlLabelFor?: string;
 }
 // million-ignore
 export default function InputFields({
   inputLabel,
   inputPlaceholder,
   error,
+  htmlLabelFor,
   ...props
 }: InputProps) {
   return (
     <div className="flex flex-col gap-2 text-center mb-2">
-      <label className="text-1xl ">{inputLabel}</label>
+      <label className="text-1xl " htmlFor={htmlLabelFor}>
+        {inputLabel}
+      </label>
       <p>
         {error && <p className="text-red-400 text-xs mt-1 mb-1">{error}</p>}
 

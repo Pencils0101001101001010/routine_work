@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import React, { useState, type SubmitEvent } from "react";
 import AuthButton from "../(reusable)/Button";
 import InputFields from "../(reusable)/InputFields";
@@ -61,6 +62,7 @@ export default function LoginPage() {
         type="tel"
         name="whatsapp_number"
         inputLabel="Phone Number"
+        htmlLabelFor="tel"
         onChange={handleOnChange}
         value={formData.whatsapp_number}
         error={fieldErrors.whatsapp_number?.[0]}
@@ -69,6 +71,7 @@ export default function LoginPage() {
       <InputFields
         type="password"
         name="password"
+        htmlLabelFor="password"
         inputLabel="Password"
         onChange={handleOnChange}
         value={formData.password}
