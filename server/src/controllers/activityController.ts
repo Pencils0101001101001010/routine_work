@@ -48,3 +48,28 @@ export const getJobsSentCount: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const trackLinkClick: RequestHandler = async (req, res, next) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT user_id, external_job_id, source_url FROM notification_log WHERE id = $1`,
+      [req.params.id],
+    );
+    const row = rows[0];
+    if (!row) return res.status(404).send("Link not found");
+
+    const ua = req.get("user-agent") ?? "";
+    if (!/bot|crawler|preview|scanner|spider/i.test(ua)) {
+      pool
+        .query(
+          `INSERT INTO link_clicks (notification_id, user_id, external_job_id, user_agent)
+           VALUES ($1, $2, $3, $4)`,
+          [req.params.id, row.user_id, row.external_job_id, ua],
+        )
+        .catch(console.error); // don't delay the redirect
+    }
+    return res.redirect(302, row.source_url);
+  } catch (e) {
+    next(e);
+  }
+};

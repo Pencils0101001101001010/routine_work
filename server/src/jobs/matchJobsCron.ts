@@ -9,6 +9,7 @@ import { sendMatchNotification } from "../services/emailServices.js";
 import { logNotification } from "../models/notificationModel.js";
 import pool from "../db/db.js";
 import { sendNoMatchNotification } from "../services/no-match.service.js";
+import { randomUUID } from "node:crypto";
 
 // import cron from "node-cron";
 //& Once we have a paid plan on render we can use node-cron job to run this everyday 8 am
@@ -95,7 +96,12 @@ export async function runMatchJob(): Promise<void> {
         }
 
         for (const match of newMatches) {
-          let result = await sendMatchNotification(user.email, match);
+          const trackingId = randomUUID();
+          let result = await sendMatchNotification(
+            user.email,
+            match,
+            trackingId,
+          );
 
           for (let i = 0; i < MAX_RETRIES; i++) {
             //retry failed mails
@@ -108,6 +114,7 @@ export async function runMatchJob(): Promise<void> {
           }
 
           await logNotification(
+            trackingId,
             user.userId,
             match.id,
             match.title,

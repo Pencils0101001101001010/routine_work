@@ -3,10 +3,10 @@ import type { JobMatch } from "../types/index.js";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-//! Can I add a button to this email that tracks the users clicks to link to active heat map on their profile ?
 export async function sendMatchNotification(
   email: string,
   match: JobMatch,
+  trackingId?: string,
 ): Promise<{
   success: boolean;
   reason?: string;
@@ -15,6 +15,7 @@ export async function sendMatchNotification(
 }> {
   const titleIfNull = match.title || "an available vacancy";
   const companyIfNull = match.company || "This company is";
+  const trackUrl = `${process.env.TRACKING_API_URL}/r/${trackingId}`;
 
   try {
     const { data, error } = await resend.emails.send({
@@ -22,7 +23,7 @@ export async function sendMatchNotification(
       from: "RoutineWorks <notifications@update.gisteraand.co.za>",
       to: email,
       subject: `New match: ${titleIfNull} at ${companyIfNull}`,
-      text: `A new job matching your preferences was posted: ${titleIfNull} at ${companyIfNull}. Apply here: ${match.sourceUrl}`,
+      text: `A new job matching your preferences was posted: ${titleIfNull} at ${companyIfNull}. Apply here: ${trackUrl}`,
       html: `
         <div style="font-family: Arial, Helvetica, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px; color: #1a1a1a; background-color: #ffffff;">
           <p style="font-size: 13px; color: #2563eb; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; margin: 0 0 12px;">
@@ -37,7 +38,7 @@ export async function sendMatchNotification(
           <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 0 32px">
             <tr>
               <td style="background-color: #2563eb; border-radius: 6px">
-                <a href="${match.sourceUrl}" style="display: inline-block; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: bold; padding: 12px 28px;">
+                <a href="${trackUrl}" style="display: inline-block; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: bold; padding: 12px 28px;">
                   View and apply
                 </a>
               </td>
