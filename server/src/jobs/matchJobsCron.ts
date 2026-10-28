@@ -108,7 +108,11 @@ export async function runMatchJob(): Promise<void> {
             if (!result.success) {
               console.warn(`Retry ${i + 1} for ${user.email} (${match.title})`);
               await new Promise((resolve) => setTimeout(resolve, 1500));
-              result = await sendMatchNotification(user.email, match);
+              result = await sendMatchNotification(
+                user.email,
+                match,
+                trackingId,
+              );
               if (result.success) break;
             }
           }

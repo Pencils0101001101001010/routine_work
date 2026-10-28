@@ -13,7 +13,7 @@ export async function logNotification(
 ) {
   try {
     await pool.query<NotificationLog>(
-      "INSERT INTO NOTIFICATION_LOG (id, user_id, job_match_id, job_title, company, status, source_url, sent_at, external_job_id) VALUES ($1, $2, $3, $4, $5, $6, NOW(), $7, $8)",
+      "INSERT INTO notification_log (id, user_id, job_match_id, job_title, company, status, source_url, sent_at, external_job_id) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), $8)",
       [
         trackingId,
         userId,

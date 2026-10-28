@@ -16,7 +16,7 @@ export async function sendNoMatchNotification(
     const { data, error } = await resend.emails.send({
       from: "RoutineWorks <notifications@update.gisteraand.co.za>",
       to: email,
-      subject: `No match on you preference`,
+      subject: `No match on your preference`,
       text: `We couldn't find a match, Try setting and new preference or location for ${noMatch.job_title}`,
       html: `
         <div style="font-family: Arial, Helvetica, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px; color: #1a1a1a; background-color: #ffffff;">
