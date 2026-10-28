@@ -25,7 +25,6 @@ export async function logNotification(
         externalJobId,
       ],
     );
-    console.log("=========All notifications sent=============");
   } catch (error: any) {
     console.error(error.message);
   }

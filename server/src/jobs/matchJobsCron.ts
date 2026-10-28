@@ -78,21 +78,20 @@ export async function runMatchJob(): Promise<void> {
           user.userId,
           jobs,
         );
-        const noMatches = await noMatchesFound(
-          user.preferenceId,
-          jobs,
-          newMatches,
-        );
+        const noMatches = await noMatchesFound(user.preferenceId, jobs);
 
         if (noMatches.length >= 2) {
-          for (const noMatch of noMatches) {
-            await sendNoMatchNotification(user.email, noMatch);
+          const latest = noMatches[0];
+          if (latest) {
+            const sent = await sendNoMatchNotification(user.email, latest);
+            // only reset the counter if the email actually went out
+            if (sent.success) {
+              await pool.query(
+                `DELETE FROM preference_not_matched WHERE preference_id = $1`,
+                [user.preferenceId],
+              );
+            }
           }
-
-          await pool.query(
-            `DELETE FROM preference_not_matched WHERE preference_id = $1`,
-            [user.preferenceId],
-          );
         }
 
         for (const match of newMatches) {

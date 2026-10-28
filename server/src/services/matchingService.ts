@@ -55,17 +55,16 @@ export async function findNewMatches(
 export async function noMatchesFound(
   preferenceId: string,
   jobs: AdzunaJob[],
-  newMatches: JobMatch[],
 ): Promise<PreferenceNotMatched[]> {
-  if (jobs.length > 0 || newMatches.length > 0) return [];
-
+  if (jobs.length > 0) {
+    // Adzuna found something, so the "no match" streak is over
+    await pool.query(
+      `DELETE FROM preference_not_matched WHERE preference_id = $1`,
+      [preferenceId],
+    );
+    return [];
+  }
   try {
-    if (newMatches.length > 0) {
-      await pool.query(
-        `DELETE FROM preference_not_matched WHERE preference_id = $1`,
-        [preferenceId],
-      );
-    }
     await pool.query(
       `INSERT INTO preference_not_matched (preference_id, user_id, job_title, location)
        SELECT id, user_id, job_title, location
