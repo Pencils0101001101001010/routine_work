@@ -86,7 +86,7 @@ export const ActivityHeatmap = () => {
   };
 
   return (
-    <div className="flex flex-col h-full md:h-160 w-full items-center justify-center mb-20 p-5">
+    <div className="flex flex-col h-screen w-full items-center justify-center mb-20 p-5">
       <h1 className="text-2xl">Activity for {year}</h1>
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-5 mt-4 mb-4">
