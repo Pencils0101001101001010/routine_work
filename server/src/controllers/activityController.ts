@@ -1,5 +1,13 @@
 import type { RequestHandler } from "express";
 import pool from "../db/db.js";
+import type { HeatmapActivity } from "../types/index.js";
+
+const getLevel = (count: number): HeatmapActivity["level"] => {
+  if (count > 20) return 4;
+  if (count >= 11) return 3;
+  if (count >= 5) return 2;
+  return 1;
+};
 
 export const getSentJobs: RequestHandler = async (req, res, next) => {
   const userId = req.userId;
@@ -71,5 +79,35 @@ export const trackLinkClick: RequestHandler = async (req, res, next) => {
     return res.redirect(302, row.source_url);
   } catch (e) {
     next(e);
+  }
+};
+
+export const getClicksActivity: RequestHandler = async (req, res, next) => {
+  const userId = req.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized." });
+  }
+
+  try {
+    const results = await pool.query<{ day: string; count: string }>(
+      `SELECT to_char(clicked_at::date, 'YYYY-MM-DD') AS day,
+              COUNT(*) AS count
+       FROM link_clicks
+       WHERE user_id = $1
+       GROUP BY clicked_at::date
+       ORDER BY clicked_at::date`,
+      [userId],
+    );
+
+    const activities: HeatmapActivity[] = results.rows.map((row) => {
+      const count = Number(row.count);
+      return { date: row.day, count, level: getLevel(count) };
+    });
+
+    // console.log(activities);
+    return res.status(200).json(activities);
+  } catch (error) {
+    next(error);
   }
 };

@@ -71,3 +71,9 @@ export interface PreferenceNotMatched {
   job_title: string;
   location: string;
 }
+
+export interface HeatmapActivity {
+  date: string;
+  count: number;
+  level: 1 | 2 | 3 | 4;
+}

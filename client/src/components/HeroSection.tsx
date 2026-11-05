@@ -16,7 +16,9 @@ export default function HeroSection() {
   };
 
   useEffect(() => {
-    getCurrentCount();
+    const getCC = async () => await getCurrentCount();
+
+    getCC();
   }, []);
 
   return (

@@ -73,6 +73,16 @@ export default function UserMenu() {
           <li role="none">
             <Link
               role="menuitem"
+              to="/active"
+              className={itemClass}
+              onClick={() => setOpen(false)}
+            >
+              Activity
+            </Link>
+          </li>
+          <li role="none">
+            <Link
+              role="menuitem"
               to="/user-profile"
               className={itemClass}
               onClick={() => setOpen(false)}
@@ -80,6 +90,7 @@ export default function UserMenu() {
               Profile
             </Link>
           </li>
+
           <li role="none" className="border-t my-1" />
           <li role="none">
             <button
