@@ -86,15 +86,15 @@ export const ActivityHeatmap = () => {
   };
 
   return (
-    <div className="flex flex-col h-full md:h-screen w-full items-center justify-center mb-20 p-5">
+    <div className="flex flex-col h-full md:h-[70vh] w-full items-center justify-center mb-20 p-5">
       <h1 className="text-2xl">Activity for {year}</h1>
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-5 mt-4 mb-4">
-        <MapKeys description="Not applying" hexColor="#3F3F46" />
-        <MapKeys description="Keeping busy" hexColor={LEVEL_COLORS.level1} />
-        <MapKeys description="Above Average" hexColor={LEVEL_COLORS.level2} />
-        <MapKeys description="Very active" hexColor={LEVEL_COLORS.level3} />
-        <MapKeys description="Legendary" hexColor={LEVEL_COLORS.level4} />
+        <MapKeys description="No activity" hexColor="#3F3F46" />
+        <MapKeys description="Level 1" hexColor={LEVEL_COLORS.level1} />
+        <MapKeys description="Level 2" hexColor={LEVEL_COLORS.level2} />
+        <MapKeys description="Level 3" hexColor={LEVEL_COLORS.level3} />
+        <MapKeys description="Lever 4" hexColor={LEVEL_COLORS.level4} />
       </div>
 
       {isPending && <p>Loading activity...</p>}

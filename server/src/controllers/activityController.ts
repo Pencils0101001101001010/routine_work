@@ -92,7 +92,7 @@ export const getClicksActivity: RequestHandler = async (req, res, next) => {
   try {
     const results = await pool.query<{ day: string; count: string }>(
       `SELECT to_char(clicked_at::date, 'YYYY-MM-DD') AS day,
-              COUNT(*) AS count
+              COUNT(DISTINCT external_job_id) AS count
        FROM link_clicks
        WHERE user_id = $1
        GROUP BY clicked_at::date
