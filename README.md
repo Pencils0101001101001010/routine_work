@@ -101,7 +101,7 @@ frontend in progress
 - [x] Job preference CRUD
 - [x] Adzuna integration + daily matching cron
 - [x] Email notifications
-- [ ] Activity tracker UI (streaks/heatmap)
+- [x] Activity tracker UI (streaks/heatmap)
 - [ ] WhatsApp notifications (once funding/verification allows)
 - [ ] Rewards system for consistent activity
 - [ ] Direct partnerships with local job boards (Pnet, Careers24, CareerJunction) once there's usage traction to show
