@@ -1,10 +1,10 @@
+import "../config/loadEnv.js";
 import type { RequestHandler } from "express";
 import pool from "../db/db.js";
 import type { JobPreference } from "../types/index.js";
 
 const DEFAULT_MAX_PREFERENCES = 5;
 const OWNER_MAX_PREFERENCES = 25;
-const OWNER_ID = "15df997d-b267-4437-97a5-f3e98e6befbb";
 
 export const addPreferences: RequestHandler = async (req, res, next) => {
   const { job_title, location, distance, active } = req.body;
@@ -15,7 +15,9 @@ export const addPreferences: RequestHandler = async (req, res, next) => {
   }
 
   const maxPreferences =
-    userId === OWNER_ID ? OWNER_MAX_PREFERENCES : DEFAULT_MAX_PREFERENCES;
+    userId === process.env.OWNER_ID
+      ? OWNER_MAX_PREFERENCES
+      : DEFAULT_MAX_PREFERENCES;
 
   try {
     const countResult = await pool.query(
