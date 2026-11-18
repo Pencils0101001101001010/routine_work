@@ -12,7 +12,6 @@ import Footer from "./components/Footer";
 import UserProfile from "./components/UserProfile";
 import ForgotPassword from "./components/(auth)/ForgotPassword";
 import ResetPassword from "./components/(auth)/ResetPassword";
-import { ActivityHeatmap } from "./components/HeatMap";
 
 function App() {
   return (
@@ -40,7 +39,6 @@ function AppRoutes() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/active" element={<ActivityHeatmap />} />
 
       <Route
         path="/preferences"

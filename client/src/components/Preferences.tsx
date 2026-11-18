@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import api from "../../api/client";
 import type { AxiosError } from "axios";
 import TableHead from "./(reusable)/TableHead";
+import { ActivityHeatmap } from "./HeatMap";
 
 export default function Preferences() {
   const [formData, setFormData] = useState<JobPreference>({
@@ -112,6 +113,7 @@ export default function Preferences() {
 
   return (
     <div className="h-full min-h-screen">
+      <h1 className="text-center text-2xl my-4">Set preferences</h1>
       <form onSubmit={handleSubmit} className="mb-5">
         <span className="flex flex-col md:flex-row items-center justify-center mb-5 gap-5">
           <InputFields
@@ -153,9 +155,7 @@ export default function Preferences() {
           <AuthButton type="submit">Set</AuthButton>
         </span>
       </form>
-      <h1 className="text-center text-2xl font-extrabold my-4">
-        Set preferences
-      </h1>
+
       <section className="flex justify-center items-center mb-4">
         <section className="mb-4">
           {/* Mobile: card list */}
@@ -184,6 +184,7 @@ export default function Preferences() {
               ))
             )}
           </div>
+          <ActivityHeatmap />
 
           {/* Desktop/tablet: table */}
           <div className="hidden md:flex justify-center items-center">

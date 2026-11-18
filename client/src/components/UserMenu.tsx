@@ -70,7 +70,7 @@ export default function UserMenu() {
               History
             </Link>
           </li>
-          <li role="none">
+          {/* <li role="none">
             <Link
               role="menuitem"
               to="/active"
@@ -79,7 +79,7 @@ export default function UserMenu() {
             >
               Activity
             </Link>
-          </li>
+          </li> */}
           <li role="none">
             <Link
               role="menuitem"

@@ -90,6 +90,7 @@ export const getClicksActivity: RequestHandler = async (req, res, next) => {
   }
 
   try {
+    //& req time:req start: 0.159ms - 2.594s,  before function
     const results = await pool.query<{ day: string; count: string }>(
       `SELECT to_char(clicked_at::date, 'YYYY-MM-DD') AS day,
               COUNT(DISTINCT external_job_id) AS count
@@ -100,12 +101,35 @@ export const getClicksActivity: RequestHandler = async (req, res, next) => {
       [userId],
     );
 
+    //* req time: 0.02ms - 2.261s --- after Using a function in db instead of a massive query : https://claude.ai/chat/df8e300c-5269-43b3-b291-05e800dc03a9
+    // const results = await pool.query<{ day: string; count: number }>(
+    //   "SELECT * FROM get_click_activity($1)",
+    //   [userId],
+    // );
+    // console.time("req start");
+
+    // const test = await pool.query(`
+    //     SELECT name, preference_count, CASE
+    //     WHEN preference_count = 0 THEN 'No preference set.'
+    //     WHEN preference_count < 5 THEN 'You can add more preference.'
+    //     ELSE 'Set more preference.'
+    //     END AS user_preference_count
+    //     FROM (
+    //     SELECT u.id, u.name,  COUNT(p.user_id) AS preference_count
+    //     FROM users u
+    //     LEFT JOIN job_preferences p ON u.id = p.user_id
+    //     GROUP BY u.id, u.name
+    //     )
+    //   `);
+
+    // console.log(test.rows);
+
     const activities: HeatmapActivity[] = results.rows.map((row) => {
       const count = Number(row.count);
       return { date: row.day, count, level: getLevel(count) };
     });
 
-    // console.log(activities);
+    console.timeEnd("req start");
     return res.status(200).json(activities);
   } catch (error) {
     next(error);
