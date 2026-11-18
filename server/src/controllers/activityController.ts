@@ -129,7 +129,6 @@ export const getClicksActivity: RequestHandler = async (req, res, next) => {
       return { date: row.day, count, level: getLevel(count) };
     });
 
-    console.timeEnd("req start");
     return res.status(200).json(activities);
   } catch (error) {
     next(error);
