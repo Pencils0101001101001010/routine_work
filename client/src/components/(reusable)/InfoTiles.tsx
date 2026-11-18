@@ -15,17 +15,17 @@ export default function InfoTiles({
 }: InfoProps) {
   return (
     <div className="flex md:flex-row items-center justify-center relative">
-      <span className="w-55 h-62 mx-4 my-3 rounded-2xl shadow-2xl border-l border-r border-green-400 bg-[#01290688] backdrop-blur-md px-3 py-2 text-white hover:border-green-200 hover:ring-green-400/40 hover:shadow-2xl">
-        <h1 className="text-1xl md:text-2xl text-green-300 my-2 font-bold">
+      <span className="w-55 h-62 mx-4 my-3 rounded-2xl shadow-2xl border-l border-r border-[#ecc999] bg-[#65564488] backdrop-blur-md px-3 py-2 text-white hover:border-[#826946] hover:ring-[#9d825b] hover:shadow-2xl">
+        <h1 className="text-1xl md:text-2xl text-[#ecc999] my-2 font-bold">
           {title}
         </h1>
         <p className="mb-4">{description}</p>
         {linkUrl ? (
           <Link
-            className="bottom-6 right-1 w-full text-green-300  absolute "
+            className="bottom-6 right-1 w-full text-[#ecc999] hover:text-[#826946]  absolute "
             to={linkUrl}
           >
-            {linkLabel}→
+            {linkLabel}
           </Link>
         ) : null}
       </span>

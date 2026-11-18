@@ -16,7 +16,7 @@ export default function ListItem({
   return (
     <div>
       {linkUrl ? (
-        <li className="hover:text-green-400">
+        <li className="hover:text-[#ecc999]">
           <Link
             to={linkUrl}
             className="flex flex-col md:flex-row items-center justify-center gap-2 py-4"

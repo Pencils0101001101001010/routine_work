@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import AuthButton from "./(reusable)/Button";
 import { toast } from "react-hot-toast";
 import api from "../../api/client";
@@ -41,6 +42,7 @@ export default function UserProfile() {
       const result = await api.get<User>("/user/thats-me");
 
       setUserData(result.data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error);
     }
@@ -98,7 +100,10 @@ export default function UserProfile() {
         },
       );
       setChangePassword(false);
-    } catch (error) {}
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      // NO USE
+    }
   };
 
   const handleOpenEditForm = () => {
@@ -138,6 +143,7 @@ export default function UserProfile() {
       setUserData((prev) => (prev ? { ...prev, ...draft } : prev));
       updateUser(draft);
       setOpenEditing(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       //toast handles the error
     }
@@ -152,6 +158,7 @@ export default function UserProfile() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     getUser();
   }, []);
 
@@ -162,7 +169,7 @@ export default function UserProfile() {
           <h1 className="text-2xl">Edit user info</h1>
           <form
             onSubmit={handelSubmit}
-            className="flex flex-col items-center w-75 md:w-3xl p-5 rounded-2xl justify-around mt-30 mb-30  shadow-2xl border-l border-r border-green-400 bg-[#00000068] backdrop-blur-md "
+            className="flex flex-col items-center w-75 md:w-3xl p-5 rounded-2xl justify-around mt-30 mb-30  shadow-2xl border-l border-r border-[#ecc999] bg-[#00000068] backdrop-blur-md "
           >
             <InputFields
               name="name"
@@ -205,7 +212,7 @@ export default function UserProfile() {
             />
           </PopupModal>
           <h1 className="text-2xl">User Profile</h1>
-          <div className="flex flex-col  w-75 md:w-3xl text-center justify-around  h-100  px-5 py-5 rounded-2xl shadow-2xl border-l border-r bg-[#00000068] backdrop-blur-md border-green-400 mt-15 mb-10">
+          <div className="flex flex-col  w-75 md:w-3xl text-center justify-around  h-100  px-5 py-5 rounded-2xl shadow-2xl border-l border-r bg-[#00000068] backdrop-blur-md border-[#ecc999] mt-15 mb-10">
             <UserProfileFields label="Name" userData={userData?.name} />
             <UserProfileFields label="Email" userData={userData?.email} />
             <UserProfileFields
@@ -221,7 +228,7 @@ export default function UserProfile() {
       {changePassword ? (
         <form
           onSubmit={submitPasswordChange}
-          className="flex flex-col items-center w-75 md:w-3xl p-5 rounded-2xl justify-around mt-10 mb-5 shadow-2xl border-l border-r border-green-400 "
+          className="flex flex-col items-center w-75 md:w-3xl p-5 rounded-2xl justify-around mt-10 mb-5 shadow-2xl border-l border-r border-[#ecc999] "
         >
           <InputFields
             name="currentPassword"
@@ -249,7 +256,7 @@ export default function UserProfile() {
       ) : (
         <div>
           <h1 className="text-2xl text-center">Change Password</h1>
-          <div className="flex flex-col  w-75 md:w-3xl text-center justify-around bg-[#00000068] backdrop-blur-md  h-50  px-5 py-5 rounded-2xl shadow-2xl border-l border-r border-green-400 mt-10 mb-10">
+          <div className="flex flex-col  w-75 md:w-3xl text-center justify-around bg-[#00000068] backdrop-blur-md  h-50  px-5 py-5 rounded-2xl shadow-2xl border-l border-r border-[#ecc999] mt-10 mb-10">
             <UserProfileFields label="Password" userData="*******" />
             <AuthButton onClick={editPassword}>Edit</AuthButton>
           </div>

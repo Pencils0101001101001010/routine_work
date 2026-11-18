@@ -33,13 +33,13 @@ export default function UserJobHistory() {
               return (
                 <div
                   key={h.id}
-                  className={`rounded-2xl shadow-2xl border-l border-r border-green-400 bg-[#00000068] backdrop-blur-md w-87.5 h-45  p-4 flex flex-col justify-between hover:shadow-2xl ${
+                  className={`rounded-2xl shadow-2xl border-l border-r border-[#ecc999] bg-[#00000068] backdrop-blur-md w-87.5 h-45  p-4 flex flex-col justify-between hover:shadow-2xl ${
                     isSent
-                      ? "border-green-300/50 hover:border-green-300 hover:bg-green-400/10"
+                      ? "border-[#ecc999] hover:bg-[#ecc999]/10"
                       : "border-red-300/50 hover:border-red-300 hover:bg-red-400/10"
                   }`}
                 >
-                  <p className="wrap-break-word font-extrabold text-1xl text-green-400">
+                  <p className="wrap-break-word font-extrabold text-1xl text-[#ecc999]">
                     {h.company ? h.company : "No Company name"}
                   </p>
 

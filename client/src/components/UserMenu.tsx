@@ -27,7 +27,7 @@ export default function UserMenu() {
   }, [open]);
 
   const itemClass =
-    "block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 hover:text-green-500";
+    "block w-full px-4 py-2 text-left text-sm hover:text-[#ecc999]";
 
   return (
     <div ref={containerRef} className="relative">
@@ -35,7 +35,7 @@ export default function UserMenu() {
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="flex items-center gap-1 hover:text-green-400"
+        className="flex items-center gap-1 border-[#ecc999]"
       >
         {user?.name ?? "Account"}
         <span

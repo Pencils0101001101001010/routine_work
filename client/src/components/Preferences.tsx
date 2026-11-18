@@ -140,7 +140,7 @@ export default function Preferences() {
               name="distance"
               value={formData.distance}
               onChange={handleChange}
-              className="rounded-2xl shadow-2xl border-l border-r border-green-400  mb-2 px-3 py-2 text-white focus:border-green-400 focus:outline-hidden focus:ring-2 focus:ring-green-400/40 focus:zoom-110 focus:shadow-2xl focus:mb-4 bg-[#000000c1] backdrop-blur-md" // match your other inputs' styling
+              className="rounded-2xl shadow-2xl border-l border-r border-[#ecc999]  mb-2 px-3 py-2 text-white focus:border-[#ecc999] focus:outline-hidden focus:ring-2 focus:ring-[#ecc999] focus:zoom-110 focus:shadow-2xl focus:mb-4 bg-[#000000c1] backdrop-blur-md" // match your other inputs' styling
             >
               <option value={10}>10km</option>
               <option value={20}>20km</option>
@@ -159,17 +159,17 @@ export default function Preferences() {
       <section className="flex justify-center items-center mb-4">
         <section className="mb-4">
           {/* Mobile: card list */}
-          <div className="flex flex-col gap-3 md:hidden">
+          <div className="flex flex-col gap-3 md:hidden m-5">
             {jobPreference.length <= 0 ? (
               <p className="text-center px-4 py-6">No Preferences set</p>
             ) : (
               jobPreference.map((j) => (
                 <div
                   key={j.id}
-                  className="  w-87.5 rounded-2xl shadow-2xl border-l border-r border-green-400 hover:shadow-2xl p-4 flex flex-col gap-2"
+                  className="  w-87.5 rounded-2xl shadow-2xl border-l border-r border-[#ecc999] hover:shadow-2xl p-4 flex flex-col gap-2"
                 >
                   <span className="font-bold text-lg">{j.job_title}</span>
-                  <div className="flex justify-between text-sm text-green-100/80 mb-5">
+                  <div className="flex justify-between text-sm  mb-5">
                     <span>{j.location}</span>
                     <span>{j.distance} km</span>
                   </div>
@@ -207,16 +207,16 @@ export default function Preferences() {
                 ) : (
                   jobPreference.map((j) => (
                     <tr key={j.id}>
-                      <td className="px-8 py-4 border-2 border-green-800">
+                      <td className="px-8 py-4 border-2 border-[#ecc999]">
                         {j.job_title}
                       </td>
-                      <td className="px-8 py-4 border-2 border-green-800">
+                      <td className="px-8 py-4 border-2 border-[#ecc999]">
                         {j.location}
                       </td>
-                      <td className="px-8 py-4 border-2 border-green-800">
+                      <td className="px-8 py-4 border-2 border-[#ecc999]">
                         {j.distance} km
                       </td>
-                      <td className="px-8 py-4 border-2 border-green-800">
+                      <td className="px-8 py-4 border-2 border-[#ecc999]">
                         <AuthButton
                           type="button"
                           onClick={() => onDelete(j.id)}
