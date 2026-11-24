@@ -27,3 +27,28 @@
     font-size: 16px;
   }
 }
+
+.blocks_grid {
+  display: grid;
+  grid-template-columns: repeat(47, 40px);
+  grid-template-rows: repeat(5, 40px);
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.fun_colors {
+  border: rgba(128, 128, 128, 0.516) solid 0.5px;
+  background-color: transparent;
+  transition: background-color 3s ease-out;
+}
+
+.fun_colors:hover {
+  background-color: var(--hover);
+  transition: background-color 0s;
+}
+
+/* @media (max-width: 600px) {
+  .blocks_grid .fun_colors {
+    visibility: hidden;
+  }
+} */

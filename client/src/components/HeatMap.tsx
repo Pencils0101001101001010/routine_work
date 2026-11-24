@@ -94,7 +94,7 @@ export const ActivityHeatmap = () => {
         <MapKeys description="Level 1" hexColor={LEVEL_COLORS.level1} />
         <MapKeys description="Level 2" hexColor={LEVEL_COLORS.level2} />
         <MapKeys description="Level 3" hexColor={LEVEL_COLORS.level3} />
-        <MapKeys description="Lever 4" hexColor={LEVEL_COLORS.level4} />
+        <MapKeys description="Level 4" hexColor={LEVEL_COLORS.level4} />
       </div>
 
       {isPending && <p>Loading activity...</p>}

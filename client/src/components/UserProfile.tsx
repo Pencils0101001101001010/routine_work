@@ -100,7 +100,6 @@ export default function UserProfile() {
         },
       );
       setChangePassword(false);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       // NO USE
     }
