@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Carousel from "./(reusable)/Carousel";
+// import Carousel from "./(reusable)/Carousel";
 import LandingMessage from "./(reusable)/LandingMessage";
 import api from "../../api/client";
-import HoverBlocks from "./(reusable)/HoverBlocks";
+import Hero from "./(reusable)/Hero";
 
 export default function HeroSection() {
   const [currentSentJobs, setCurrentSentJobs] = useState(0);
@@ -24,8 +24,7 @@ export default function HeroSection() {
 
   return (
     <section>
-      <Carousel />
-      <HoverBlocks landingPage />
+      <Hero />
       <LandingMessage />
       <div className="flex flex-col text-center justify-center mb-12 text-3xl p-2">
         <p>Total matches we've sent </p>
