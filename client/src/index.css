@@ -42,23 +42,13 @@
   transition: background-color 3s ease-out;
 }
 
-.blocks_grid,
-.fun_colors {
-  touch-action: none;
-}
-
 .fun_colors:hover {
   background-color: var(--hover);
   transition: background-color 0s;
 }
 
-.fun_colors.active::before {
-  opacity: 1;
-  transition: opacity 0s;
-}
-
-/* @media (max-width: 600px) {
-  .blocks_grid .fun_colors {
-    visibility: hidden;
+@media (max-width: 600px) {
+  .blocks_grid {
+    display: none;
   }
-} */
+}
