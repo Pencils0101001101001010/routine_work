@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 
 interface BlocksProps {
@@ -243,19 +244,32 @@ const BLOCKS = [
 ];
 
 export default function HoverBlocks({ landingPage }: BlocksProps) {
+  const flash = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = document.elementFromPoint(
+      e.clientX,
+      e.clientY,
+    ) as HTMLElement | null;
+    if (!el || !el.classList.contains("block")) return;
+
+    el.classList.add("active");
+    clearTimeout((el as any)._t);
+    (el as any)._t = setTimeout(() => el.classList.remove("active"), 60);
+  };
   return (
     <>
       {landingPage ? (
-        <div className=" blocks_grid justify-center">
-          {BLOCKS.map((b) => {
-            return (
-              <div
-                key={b.id}
-                className="fun_colors"
-                style={{ "--hover": b.bg_hover } as React.CSSProperties}
-              />
-            );
-          })}
+        <div
+          className="blocks_grid"
+          onPointerMove={flash}
+          onPointerDown={flash}
+        >
+          {BLOCKS.map((b) => (
+            <div
+              key={b.id}
+              className="fun_colors"
+              style={{ "--hover": b.bg_hover } as React.CSSProperties}
+            />
+          ))}
         </div>
       ) : (
         <div>

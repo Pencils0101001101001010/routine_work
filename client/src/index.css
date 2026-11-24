@@ -34,12 +34,18 @@
   grid-template-rows: repeat(5, 40px);
   max-width: 100%;
   overflow: hidden;
+  touch-action: none;
 }
 
 .fun_colors {
   border: rgba(128, 128, 128, 0.516) solid 0.5px;
   background-color: transparent;
   transition: background-color 3s ease-out;
+}
+
+.fun_colors.active::before {
+  opacity: 1;
+  transition: opacity 0s;
 }
 
 .fun_colors:hover {
