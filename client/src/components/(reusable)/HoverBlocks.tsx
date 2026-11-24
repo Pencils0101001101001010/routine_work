@@ -268,7 +268,7 @@ export default function HoverBlocks({ landingPage }: BlocksProps) {
           {BLOCKS.map((b) => (
             <div
               key={b.id}
-              className="block"
+              className="fun_colors"
               style={{ "--hover": b.bg_hover } as React.CSSProperties}
             />
           ))}
