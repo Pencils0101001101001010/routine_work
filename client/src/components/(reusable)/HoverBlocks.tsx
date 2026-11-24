@@ -245,6 +245,8 @@ const BLOCKS = [
 
 export default function HoverBlocks({ landingPage }: BlocksProps) {
   const flash = (e: React.PointerEvent<HTMLDivElement>) => {
+    (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+
     const el = document.elementFromPoint(
       e.clientX,
       e.clientY,
@@ -266,7 +268,7 @@ export default function HoverBlocks({ landingPage }: BlocksProps) {
           {BLOCKS.map((b) => (
             <div
               key={b.id}
-              className="fun_colors"
+              className="block"
               style={{ "--hover": b.bg_hover } as React.CSSProperties}
             />
           ))}
