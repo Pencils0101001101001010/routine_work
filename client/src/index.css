@@ -45,10 +45,28 @@
 .fun_colors:hover {
   background-color: var(--hover);
   transition: background-color 0s;
+  /* border-right: rgba(6, 0, 0, 0.74) solid 5px;
+  border-top: rgba(6, 0, 0, 0.74) solid 5px; */
+}
+
+.x-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 40px;
+  grid-template-rows: 40px;
 }
 
 @media (max-width: 600px) {
-  .blocks_grid {
+  .blocks_grid.ten-grid.twenty-grid {
+    display: none;
+  }
+  .twenty-grid {
+    display: none;
+  }
+  .ten-grid {
+    display: none;
+  }
+  .x-grid {
     display: none;
   }
 }

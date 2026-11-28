@@ -11,6 +11,7 @@ import type { User } from "../../types";
 import UserProfileFields from "./(reusable)/UserProfileFields";
 import PopupModal from "./(reusable)/PopupModal";
 import DeleteConfirmation from "./(reusable)/DeleteConfirmation";
+import HoverBlocks from "./(reusable)/HoverBlocks";
 
 interface ProfileForm {
   name: string;
@@ -163,6 +164,8 @@ export default function UserProfile() {
 
   return (
     <section className=" flex flex-col h-full mt-auto justify-center relative items-center ">
+      <HoverBlocks landingPage={false} />
+
       {openEditing ? (
         <>
           <h1 className="text-2xl">Edit user info</h1>

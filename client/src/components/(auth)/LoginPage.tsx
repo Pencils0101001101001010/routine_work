@@ -7,6 +7,7 @@ import { useAuth } from "../../../context/auth-context";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { parseApiError } from "../../utils/apiError";
+import HoverBlocks from "../(reusable)/HoverBlocks";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -49,8 +50,9 @@ export default function LoginPage() {
   return (
     <form
       onSubmit={handelSubmit}
-      className="flex flex-col items-center justify-center w-full h-screen text-green-50"
+      className="flex flex-col items-center justify-center w-full h-screen text-green-50 relative"
     >
+      <HoverBlocks landingPage={false} />
       <img
         src={logo}
         alt="Routine Works logo"

@@ -1,4 +1,5 @@
 import React from "react";
+import { BlockRow } from "./BlockRow";
 
 interface BlocksProps {
   landingPage: boolean;
@@ -246,7 +247,7 @@ export default function HoverBlocks({ landingPage }: BlocksProps) {
   return (
     <>
       {landingPage ? (
-        <div className=" blocks_grid justify-center">
+        <div className="blocks_grid justify-center">
           {BLOCKS.map((b) => {
             return (
               <div
@@ -258,9 +259,238 @@ export default function HoverBlocks({ landingPage }: BlocksProps) {
           })}
         </div>
       ) : (
-        <div>
-          <h1>hello</h1>
-        </div>
+        <>
+          {/* left side, stepping down 40px per row (top-10 = 40px) */}
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={119}
+            to={127}
+            className="top-10 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={127}
+            to={130}
+            className="top-10 left-150"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={130}
+            to={136}
+            className="top-20 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={136}
+            to={146}
+            className="top-30 left-70"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={146}
+            to={150}
+            className="top-40 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={150}
+            to={155}
+            className="top-40 left-50"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={155}
+            to={163}
+            className="top-50 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={163}
+            to={166}
+            className="top-60 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={166}
+            to={176}
+            className="top-60 left-40"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={176}
+            to={184}
+            className="top-70 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={184}
+            to={187}
+            className="top-80 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={187}
+            to={193}
+            className="top-80 left-60"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={193}
+            to={201}
+            className="top-90 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={201}
+            to={205}
+            className="top-100 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={205}
+            to={212}
+            className="top-100 left-50"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={212}
+            to={214}
+            className="top-110 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={220}
+            to={225}
+            className="top-110 left-50"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={232}
+            to={235}
+            className="top-120 left-90"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={225}
+            to={232}
+            className="top-130 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={225}
+            to={230}
+            className="top-130 left-120"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={232}
+            to={235}
+            className="top-140 left-10"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={132}
+            to={135}
+            className="top-150 left-80"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={220}
+            to={225}
+            className="top-160 left-10"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={225}
+            to={232}
+            className="top-170 left-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={132}
+            to={135}
+            className="top-180 left-30"
+          />
+          {/* right side pieces */}
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={225}
+            to={240}
+            className="top-130 right-90"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={220}
+            to={225}
+            className="top-70 right-40"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={232}
+            to={235}
+            className="top-40 right-90"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={225}
+            to={232}
+            className="top-30 right-1"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={232}
+            to={235}
+            className="top-60 right-10"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={132}
+            to={135}
+            className="top-80 right-80"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={220}
+            to={225}
+            className="top-100 right-10"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={225}
+            to={232}
+            className="top-30 right-1"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={132}
+            to={135}
+            className="top-110 right-30"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={132}
+            to={135}
+            className="top-180 right-30"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={210}
+            to={230}
+            className="top-170 right-5"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={50}
+            to={55}
+            className="top-160 right-40"
+          />
+          <BlockRow
+            BLOCKS={BLOCKS}
+            from={55}
+            to={65}
+            className="top-140 right-5"
+          />
+        </>
       )}
     </>
   );
